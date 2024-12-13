@@ -8,15 +8,15 @@ version = "0.1.0"
 description = "An integration package connecting CrateDB and LangChain"
 authors = []
 readme = "README.md"
-repository = "https://github.com/langchain-ai/langchain"
+repository = "https://github.com/crate/langchain-cratedb"
 license = "MIT"
 
 [tool.mypy]
 disallow_untyped_defs = "True"
 
 [tool.poetry.urls]
-"Source Code" = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/cratedb"
-"Release Notes" = "https://github.com/langchain-ai/langchain/releases?q=tag%3A%22cratedb%3D%3D0%22&expanded=true"
+"Source Code" = "https://github.com/crate/langchain-cratedb"
+"Release Notes" = "https://github.com/crate/langchain-cratedb/releases"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
