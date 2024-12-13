@@ -1,8 +1,8 @@
+import re
 import sys
 
 import tomllib
 from packaging.version import parse as parse_version
-import re
 
 MIN_VERSION_LIBS = ["langchain-core"]
 
@@ -62,4 +62,4 @@ toml_file = sys.argv[1]
 # Call the function to get the minimum versions
 min_versions = get_min_version_from_toml(toml_file)
 
-print(" ".join([f"{lib}=={version}" for lib, version in min_versions.items()]))
+print(" ".join([f"{lib}=={version}" for lib, version in min_versions.items()]))  # noqa: T201
