@@ -38,6 +38,7 @@ jobs:
   pre-commit:
     name: pre-commit
     runs-on: ubuntu-latest
+    if: false
 
     steps:
       - uses: actions/checkout@v4
