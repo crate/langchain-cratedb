@@ -2,14 +2,27 @@
 Validate LangChain using CrateDB's `FLOAT_VECTOR` / `KNN_MATCH` functionality.
 """
 
+import contextlib
+from typing import Any, Dict, Generator, List, Optional, Sequence, cast
+
 import pytest
 import sqlalchemy as sa
 from langchain_core.documents import Document
+from langchain_core.embeddings import Embeddings
 
 from langchain_cratedb.vectorstores import (
     CrateDBVectorStore,
 )
 from tests.integration_tests.conftest import CONNECTION_STRING
+from tests.fixtures.filtering_test_cases import (
+    DOCUMENTS,
+    TYPE_1_FILTERING_TEST_CASES,
+    TYPE_2_FILTERING_TEST_CASES,
+    TYPE_3_FILTERING_TEST_CASES,
+    TYPE_4_FILTERING_TEST_CASES,
+    TYPE_5_FILTERING_TEST_CASES,
+    TYPE_6_FILTERING_TEST_CASES,
+)
 from tests.integration_tests.vectorstore.fake_embeddings import (
     ADA_TOKEN_COUNT,
     ConsistentFakeEmbeddingsWithAdaDimension,
@@ -279,7 +292,8 @@ def test_cratedb_collection_no_embedding_dimension(
     )
 
 
-def test_cratedb_with_filter_in_set(engine: sa.Engine) -> None:
+@pytest.mark.parametrize("operator", ["$in", "IN"])
+def test_cratedb_with_filter_in_set(engine: sa.Engine, operator: str) -> None:
     """Test end to end construction and search."""
     texts = ["foo", "bar", "baz"]
     metadatas = [{"page": str(i)} for i in range(len(texts))]
@@ -292,7 +306,7 @@ def test_cratedb_with_filter_in_set(engine: sa.Engine) -> None:
         pre_delete_collection=True,
     )
     output = docsearch.similarity_search_with_score(
-        "foo", k=2, filter={"page": {"IN": ["0", "2"]}}
+        "foo", k=2, filter={"page": {operator: ["0", "2"]}}
     )
     prune_document_ids(output)
     # Original score values: 0.0, 0.0013003906671379406
@@ -430,3 +444,121 @@ def test_cratedb_max_marginal_relevance_search_with_score(engine: sa.Engine) -> 
     output = docsearch.max_marginal_relevance_search_with_score("foo", k=1, fetch_k=3)
     prune_document_ids(output)
     assert output == [(Document(page_content="foo"), 1.0)]
+
+
+# We should reuse this test-case across other integrations
+# Add database fixture using pytest
+@pytest.fixture
+def cratedb() -> Generator[CrateDBVectorStore, None, None]:
+    """Create an instance of CrateDBVectorStore."""
+    with get_vectorstore() as vector_store:
+        yield vector_store
+
+
+@contextlib.contextmanager
+def get_vectorstore(
+    *, embedding: Optional[Embeddings] = None
+) -> Generator[CrateDBVectorStore, None, None]:
+    """Get a pre-populated-vectorstore"""
+    store = CrateDBVectorStore.from_documents(
+        documents=DOCUMENTS,
+        collection_name="test_collection",
+        embedding=embedding or FakeEmbeddingsWithAdaDimension(),
+        connection=CONNECTION_STRING,
+        pre_delete_collection=True,
+        relevance_score_fn=lambda d: d * 0,
+    )
+    try:
+        yield cast(CrateDBVectorStore, store)
+    finally:
+        store.drop_tables()
+
+
+@pytest.mark.parametrize("test_filter, expected_ids", TYPE_1_FILTERING_TEST_CASES)
+def test_cratedb_with_metadata_filters_1(
+    test_filter: Dict[str, Any],
+    expected_ids: List[int],
+) -> None:
+    """Test end to end construction and search."""
+    with get_vectorstore() as cratedb:
+        docs = cratedb.similarity_search("meow", k=5, filter=test_filter)
+        assert [doc.metadata["id"] for doc in docs] == expected_ids, test_filter
+
+
+@pytest.mark.parametrize("test_filter, expected_ids", TYPE_2_FILTERING_TEST_CASES)
+def test_cratedb_with_metadata_filters_2(
+    cratedb: CrateDBVectorStore,
+    test_filter: Dict[str, Any],
+    expected_ids: List[int],
+) -> None:
+    """Test end to end construction and search."""
+    docs = cratedb.similarity_search("meow", k=5, filter=test_filter)
+    assert [doc.metadata["id"] for doc in docs] == expected_ids, test_filter
+
+
+@pytest.mark.parametrize("test_filter, expected_ids", TYPE_3_FILTERING_TEST_CASES)
+def test_cratedb_with_metadata_filters_3(
+    cratedb: CrateDBVectorStore,
+    test_filter: Dict[str, Any],
+    expected_ids: List[int],
+) -> None:
+    """Test end to end construction and search."""
+    docs = cratedb.similarity_search("meow", k=5, filter=test_filter)
+    assert [doc.metadata["id"] for doc in docs] == expected_ids, test_filter
+
+
+@pytest.mark.parametrize("test_filter, expected_ids", TYPE_4_FILTERING_TEST_CASES)
+def test_cratedb_with_metadata_filters_4(
+    cratedb: CrateDBVectorStore,
+    test_filter: Dict[str, Any],
+    expected_ids: List[int],
+) -> None:
+    """Test end to end construction and search."""
+    docs = cratedb.similarity_search("meow", k=5, filter=test_filter)
+    assert [doc.metadata["id"] for doc in docs] == expected_ids, test_filter
+
+
+@pytest.mark.parametrize("test_filter, expected_ids", TYPE_5_FILTERING_TEST_CASES)
+def test_cratedb_with_metadata_filters_5(
+    cratedb: CrateDBVectorStore,
+    test_filter: Dict[str, Any],
+    expected_ids: List[int],
+) -> None:
+    """Test end to end construction and search."""
+    docs = cratedb.similarity_search("meow", k=5, filter=test_filter)
+    assert [doc.metadata["id"] for doc in docs] == expected_ids, test_filter
+
+
+# TODO: Missing at upstream `langchain-postgres`.
+@pytest.mark.parametrize("test_filter, expected_ids", TYPE_6_FILTERING_TEST_CASES)
+def test_cratedb_with_metadata_filters_6(
+    cratedb: CrateDBVectorStore,
+    test_filter: Dict[str, Any],
+    expected_ids: List[int],
+) -> None:
+    """Test end to end construction and search."""
+    docs = cratedb.similarity_search("meow", k=5, filter=test_filter)
+    assert [doc.metadata["id"] for doc in docs] == expected_ids, test_filter
+
+
+@pytest.mark.parametrize(
+    "invalid_filter",
+    [
+        ["hello"],
+        {
+            "id": 2,
+            "$name": "foo",
+        },
+        {"$or": {}},
+        {"$and": {}},
+        {"$between": {}},
+        {"$eq": {}},
+        {"$exists": {}},
+        {"$exists": 1},
+        {"$not": 2},
+    ],
+)
+def test_invalid_filters(cratedb: CrateDBVectorStore, invalid_filter: Any) -> None:
+    """Verify that invalid filters raise an error."""
+    with pytest.raises(ValueError):
+        cratedb._create_filter_clause(invalid_filter)
