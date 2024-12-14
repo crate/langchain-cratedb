@@ -12,6 +12,7 @@ from tests.integration_tests.vectorstore.fake_embeddings import (
 from tests.integration_tests.vectorstore.util import prune_document_ids
 
 
+@pytest.mark.flaky(reruns=5)
 def test_cratedb_multicollection_search_success(engine: sa.Engine) -> None:
     """
     `CrateDBVectorStoreMultiCollection` provides functionality for

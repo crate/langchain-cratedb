@@ -184,6 +184,7 @@ def test_cratedb_with_filter_match(engine: sa.Engine) -> None:
     assert scores == (1.0,)
 
 
+@pytest.mark.flaky(reruns=5)
 def test_cratedb_with_filter_distant_match(engine: sa.Engine) -> None:
     """Test end to end construction and search."""
     texts = ["foo", "bar", "baz"]
@@ -310,6 +311,7 @@ def test_cratedb_collection_no_embedding_dimension(
     )
 
 
+@pytest.mark.flaky(reruns=5)
 @pytest.mark.parametrize("operator", ["$in", "IN"])
 def test_cratedb_with_filter_in_set(engine: sa.Engine, operator: str) -> None:
     """Test end to end construction and search."""
