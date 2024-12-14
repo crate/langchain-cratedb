@@ -13,7 +13,6 @@ from langchain_core.embeddings import Embeddings
 from langchain_cratedb.vectorstores import (
     CrateDBVectorStore,
 )
-from tests.integration_tests.conftest import CONNECTION_STRING
 from tests.fixtures.filtering_test_cases import (
     DOCUMENTS,
     TYPE_1_FILTERING_TEST_CASES,
@@ -23,6 +22,7 @@ from tests.fixtures.filtering_test_cases import (
     TYPE_5_FILTERING_TEST_CASES,
     TYPE_6_FILTERING_TEST_CASES,
 )
+from tests.integration_tests.conftest import CONNECTION_STRING
 from tests.integration_tests.vectorstore.fake_embeddings import (
     ADA_TOKEN_COUNT,
     ConsistentFakeEmbeddingsWithAdaDimension,

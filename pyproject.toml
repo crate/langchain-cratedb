@@ -37,6 +37,8 @@ markers = [
     "compile: mark placeholder test used to compile integration tests without running them",
 ]
 asyncio_mode = "auto"
+log_level = "DEBUG"
+log_cli_level = "DEBUG"
 
 [tool.poetry.group.test]
 optional = true
