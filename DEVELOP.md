@@ -9,6 +9,21 @@ Other fragments have been derived from [langchain-datastax], [langchain-mongodb]
 and [langchain-postgres].
 
 
+## Tests
+Run all tests.
+```shell
+make test
+make integration_test
+```
+Run tests selectively.
+```shell
+pytest -vvv -k standard
+```
+```shell
+pytest -vvv -k cratedb
+```
+
+
 [How to implement an integration package]: https://python.langchain.com/docs/contributing/how_to/integrations/package/
 [langchain-datastax]: https://github.com/langchain-ai/langchain-datastax
 [langchain-mongodb]: https://github.com/langchain-ai/langchain-mongodb
