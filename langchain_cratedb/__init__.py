@@ -7,7 +7,10 @@ patch_sqlalchemy_dialect()
 
 from langchain_cratedb.document_loaders import CrateDBLoader
 from langchain_cratedb.retrievers import CrateDBRetriever
-from langchain_cratedb.vectorstores import CrateDBVectorStore
+from langchain_cratedb.vectorstores import (
+    CrateDBVectorStore,
+    CrateDBVectorStoreMultiCollection,
+)
 
 try:
     __version__ = metadata.version(__package__)
@@ -18,6 +21,7 @@ del metadata  # optional, avoids polluting the results of dir(__package__)
 
 __all__ = [
     "CrateDBVectorStore",
+    "CrateDBVectorStoreMultiCollection",
     "CrateDBLoader",
     "CrateDBRetriever",
     "__version__",
