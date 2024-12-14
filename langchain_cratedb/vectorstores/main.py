@@ -25,6 +25,9 @@ from langchain_core.vectorstores import VectorStore
 from langchain_postgres._utils import maximal_marginal_relevance
 from langchain_postgres.vectorstores import (
     _LANGCHAIN_DEFAULT_COLLECTION_NAME,  # noqa: F401
+    LOGICAL_OPERATORS,
+    SPECIAL_CASED_OPERATORS,
+    TEXT_OPERATORS,
     DistanceStrategy,
     PGVector,
 )
@@ -40,6 +43,22 @@ from langchain_cratedb.vectorstores.model import ModelFactory
 # >
 # > -- https://github.com/crate/crate/issues/15768
 DEFAULT_DISTANCE_STRATEGY = DistanceStrategy.EUCLIDEAN
+
+COMPARISONS_TO_NATIVE = {
+    "$eq": "=",
+    "$ne": "!=",
+    "$lt": "<",
+    "$lte": "<=",
+    "$gt": ">",
+    "$gte": ">=",
+}
+
+SUPPORTED_OPERATORS = (
+    set(COMPARISONS_TO_NATIVE)
+    .union(TEXT_OPERATORS)
+    .union(LOGICAL_OPERATORS)
+    .union(SPECIAL_CASED_OPERATORS)
+)
 
 
 VST = TypeVar("VST", bound=VectorStore)
@@ -514,27 +533,12 @@ class CrateDBVectorStore(PGVector):
         self.logger.info(f"Querying collections: {collection_names}")
 
         with self._make_sync_session() as session:
-            filter_by = self.EmbeddingStore.collection_id.in_(collection_uuids)
+            filter_by = [self.EmbeddingStore.collection_id.in_(collection_uuids)]
 
             if filter is not None:
-                filter_clauses = []
-                for key, value in filter.items():
-                    IN = "in"
-                    if isinstance(value, dict) and IN in map(str.lower, value):
-                        value_case_insensitive = {
-                            k.lower(): v for k, v in value.items()
-                        }
-                        filter_by_metadata = self.EmbeddingStore.cmetadata[key].in_(
-                            value_case_insensitive[IN]
-                        )
-                        filter_clauses.append(filter_by_metadata)
-                    else:
-                        filter_by_metadata = self.EmbeddingStore.cmetadata[key] == str(
-                            value
-                        )
-                        filter_clauses.append(filter_by_metadata)
-
-                filter_by = sa.and_(filter_by, *filter_clauses)
+                filter_clause = self._create_filter_clause(filter)
+                if filter_clause is not None:
+                    filter_by.append(filter_clause)
 
             _type = self.EmbeddingStore
 
@@ -558,7 +562,7 @@ class CrateDBVectorStore(PGVector):
                         sa.text(str(embedding)),
                     ).label("similarity"),
                 )
-                .filter(filter_by)
+                .filter(*filter_by)
                 # CrateDB applies `KNN_MATCH` within the `WHERE` clause.
                 .filter(sa.func.knn_match(self.EmbeddingStore.embedding, embedding, k))
                 .order_by(sa.desc("similarity"))
@@ -569,3 +573,123 @@ class CrateDBVectorStore(PGVector):
                 .limit(k)
             )
         return results
+
+    def _handle_field_filter(
+        self,
+        field: str,
+        value: Any,
+    ) -> sa.SQLColumnExpression:
+        """Create a filter for a specific field.
+
+        Needs to be overwritten for CrateDB, in order to:
+
+        - Convert the use of `jsonb_path_match` functions into direct accessors
+          to CrateDB's OBJECT type, paired with vanilla SQL expressions, in order
+          to apply filter expressions to `cmetadata` columns.
+          This applies to all the standard comparison operators, as well as
+          `$between` and `$exists`.
+
+        - Remove `.astext` field accessor, because this is likely a psycopg thing.
+          See https://github.com/crate/sqlalchemy-cratedb/issues/188.
+
+        Args:
+            field: name of field
+            value: value to filter
+                If provided as is then this will be an equality filter
+                If provided as a dictionary then this will be a filter, the key
+                will be the operator and the value will be the value to filter by
+
+        Returns:
+            sqlalchemy expression
+        """
+        if not isinstance(field, str):
+            raise ValueError(
+                f"field should be a string but got: {type(field)} with value: {field}"
+            )
+
+        if field.startswith("$"):
+            raise ValueError(
+                f"Invalid filter condition. Expected a field but got an operator: "
+                f"{field}"
+            )
+
+        # Allow [a-zA-Z0-9_], disallow $ for now until we support escape characters
+        if not field.isidentifier():
+            raise ValueError(
+                f"Invalid field name: {field}. Expected a valid identifier."
+            )
+
+        if isinstance(value, dict):
+            # This is a filter specification
+            if len(value) != 1:
+                raise ValueError(
+                    "Invalid filter condition. Expected a value which "
+                    "is a dictionary with a single key that corresponds to an operator "
+                    f"but got a dictionary with {len(value)} keys. The first few "
+                    f"keys are: {list(value.keys())[:3]}"
+                )
+            operator, filter_value = list(value.items())[0]
+            # Translate operator syntax.  # TODO: Translate all parameters?
+            if operator == "IN":
+                operator = "$in"
+            # Verify that that operator is an operator
+            if operator not in SUPPORTED_OPERATORS:
+                raise ValueError(
+                    f"Invalid operator: {operator}. "
+                    f"Expected one of {SUPPORTED_OPERATORS}"
+                )
+        else:  # Then we assume an equality operator
+            operator = "$eq"
+            filter_value = value
+
+        import sqlalchemy as sa
+
+        if operator in COMPARISONS_TO_NATIVE:
+            # Then we implement an equality filter
+            # native is trusted input
+            native = COMPARISONS_TO_NATIVE[operator]
+            return self.EmbeddingStore.cmetadata[field].op(native)(filter_value)
+        elif operator == "$between":
+            # Use AND with two comparisons
+            low, high = filter_value
+            lower_bound = self.EmbeddingStore.cmetadata[field].op(">=")(low)
+            upper_bound = self.EmbeddingStore.cmetadata[field].op("<=")(high)
+            return sa.and_(lower_bound, upper_bound)
+        elif operator in {"$in", "$nin", "$like", "$ilike"}:
+            # We'll do force coercion to text
+            if operator in {"$in", "$nin"}:
+                for val in filter_value:
+                    if not isinstance(val, (str, int, float)):
+                        raise NotImplementedError(
+                            f"Unsupported type: {type(val)} for value: {val}"
+                        )
+
+                    if isinstance(val, bool):  # b/c bool is an instance of int
+                        raise NotImplementedError(
+                            f"Unsupported type: {type(val)} for value: {val}"
+                        )
+
+            queried_field = self.EmbeddingStore.cmetadata[field]
+
+            if operator in {"$in"}:
+                return queried_field.in_([str(val) for val in filter_value])
+            elif operator in {"$nin"}:
+                return ~queried_field.in_([str(val) for val in filter_value])
+            elif operator in {"$like"}:
+                return queried_field.like(filter_value)
+            elif operator in {"$ilike"}:
+                return queried_field.ilike(filter_value)
+            else:
+                raise NotImplementedError()
+        elif operator == "$exists":
+            if not isinstance(filter_value, bool):
+                raise ValueError(
+                    "Expected a boolean value for $exists "
+                    f"operator, but got: {filter_value}"
+                )
+            condition = sa.literal(field).op("=")(
+                sa.func.any(sa.func.object_keys(self.EmbeddingStore.cmetadata))
+            )
+            return condition if filter_value else ~condition
+        else:
+            raise NotImplementedError()
