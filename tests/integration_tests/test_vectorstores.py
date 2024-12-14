@@ -1,12 +1,13 @@
 from typing import AsyncGenerator, Generator
 
 import pytest
-from langchain_cratedb.vectorstores import CrateDBVectorStore
 from langchain_core.vectorstores import VectorStore
 from langchain_tests.integration_tests import (
     AsyncReadWriteTestSuite,
     ReadWriteTestSuite,
 )
+
+from langchain_cratedb.vectorstores import CrateDBVectorStore
 
 
 class TestCrateDBVectorStoreSync(ReadWriteTestSuite):

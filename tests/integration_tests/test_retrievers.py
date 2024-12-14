@@ -1,9 +1,10 @@
 from typing import Type
 
-from langchain_cratedb.retrievers import CrateDBRetriever
 from langchain_tests.integration_tests import (
     RetrieversIntegrationTests,
 )
+
+from langchain_cratedb.retrievers import CrateDBRetriever
 
 
 class TestCrateDBRetriever(RetrieversIntegrationTests):
