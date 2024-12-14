@@ -81,11 +81,8 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
             pre_delete_collection: If True, will delete the collection if it exists.
                 (default: False). Useful for testing.
             engine_args: SQLAlchemy's create engine arguments.
-            use_jsonb: Use JSONB instead of JSON for metadata. (default: True)
-                Strongly discouraged from using JSON as it's not as efficient
-                for querying.
-                It's provided here for backwards compatibility with older versions,
-                and will be removed in the future.
+            use_jsonb: Only provided for compatibility with the PostgreSQL adapter.
+                On CrateDB, metadata is stored as OBJECT.
             create_extension: If True, will create the vector extension if it
                 doesn't exist. disabling creation is useful when using ReadOnly
                 Databases.
@@ -136,9 +133,6 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         self.use_jsonb = use_jsonb
         self.create_extension = create_extension
 
-        if not use_jsonb:
-            # Replace with a deprecation warning.
-            raise NotImplementedError("use_jsonb=False is no longer supported.")
         if not self.async_mode:
             self.__post_init__()
 
