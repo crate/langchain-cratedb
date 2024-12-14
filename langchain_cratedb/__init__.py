@@ -1,4 +1,9 @@
+# ruff: noqa: E402  # Module level import not at top of file
 from importlib import metadata
+
+from langchain_cratedb.patches import patch_sqlalchemy_dialect
+
+patch_sqlalchemy_dialect()
 
 from langchain_cratedb.document_loaders import CrateDBLoader
 from langchain_cratedb.retrievers import CrateDBRetriever
