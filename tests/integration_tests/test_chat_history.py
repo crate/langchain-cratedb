@@ -17,7 +17,7 @@ from langchain.schema.messages import (
 )
 from langchain_community.chat_message_histories.sql import DefaultMessageConverter
 
-from langchain_cratedb.chat_message_histories import CrateDBChatMessageHistory
+from langchain_cratedb.chat_history import CrateDBChatMessageHistory
 
 
 @pytest.fixture(autouse=True)
