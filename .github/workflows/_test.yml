@@ -22,7 +22,7 @@ jobs:
       matrix:
         python-version:
           - "3.9"
-          - "3.12"
+          - "3.13"
 
     env:
       OS: ${{ matrix.os }}
