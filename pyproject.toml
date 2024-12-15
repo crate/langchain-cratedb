@@ -21,10 +21,10 @@ ignore_missing_imports = "True"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-langchain-community = "^0.3.11"
-langchain-core = "^0.3.15"
-langchain-postgres = "^0.0.12"
-sqlalchemy-cratedb = "^0.40.1"
+langchain-community = "<0.4"
+langchain-core = "<0.4"
+langchain-postgres = "==0.0.12"
+sqlalchemy-cratedb = ">=0.40.1"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "T201"]
@@ -67,20 +67,20 @@ optional = true
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
 langchain-tests = "==0.3.7"
-pytest-asyncio = "^0.23.2"
-pytest-mock = "^3.14.0"
-pytest-rerunfailures = "^15.0"
-pytest-socket = "^0.7.0"
-pytest-watcher = "^0.3.4"
-pytest-cov = "^6.0.0"
+pytest-asyncio = "<0.26"
+pytest-mock = "<4"
+pytest-rerunfailures = "<16"
+pytest-socket = "<0.8"
+pytest-watcher = "<0.5"
+pytest-cov = "<7"
 
 [tool.poetry.group.codespell.dependencies]
-codespell = "^2.2.6"
+codespell = "<2.4"
 
 [tool.poetry.group.test_integration.dependencies]
 
 [tool.poetry.group.lint.dependencies]
-ruff = "^0.5"
+ruff = "<0.6"
 
 [tool.poetry.group.typing.dependencies]
-mypy = "^1.10"
+mypy = "<1.11"
