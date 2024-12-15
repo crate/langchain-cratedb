@@ -1,6 +1,6 @@
 """CrateDB retrievers."""
 
-from typing import Any, List
+from typing import Any, Dict, List
 
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
 from langchain_core.documents import Document
@@ -85,6 +85,9 @@ class CrateDBRetriever(BaseRetriever):
              # TODO: Example output.
 
     """
+
+    def __init__(self, *args: List[Any], **kwargs: Dict[Any, Any]) -> None:
+        raise NotImplementedError("CrateDBRetriever not implemented yet")
 
     k: int = 3
 

@@ -1,5 +1,6 @@
 from typing import Type
 
+import pytest
 from langchain_tests.integration_tests import (
     RetrieversIntegrationTests,
 )
@@ -7,6 +8,7 @@ from langchain_tests.integration_tests import (
 from langchain_cratedb.retrievers import CrateDBRetriever
 
 
+@pytest.mark.skip("CrateDBRetriever not implemented yet")
 class TestCrateDBRetriever(RetrieversIntegrationTests):
     @property
     def retriever_constructor(self) -> Type[CrateDBRetriever]:
