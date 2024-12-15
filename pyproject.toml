@@ -21,6 +21,7 @@ ignore_missing_imports = "True"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
+langchain-community = "^0.3.11"
 langchain-core = "^0.3.15"
 langchain-postgres = "^0.0.12"
 sqlalchemy-cratedb = "^0.40.1"
@@ -59,13 +60,12 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
+langchain-tests = "==0.3.7"
 pytest-asyncio = "^0.23.2"
+pytest-mock = "^3.14.0"
+pytest-rerunfailures = "^15.0"
 pytest-socket = "^0.7.0"
 pytest-watcher = "^0.3.4"
-langchain-community = "^0.3.11"
-langchain-tests = "==0.3.7"
-pytest-rerunfailures = "^15.0"
-pytest-mock = "^3.14.0"
 
 [tool.poetry.group.codespell.dependencies]
 codespell = "^2.2.6"
