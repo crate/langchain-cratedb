@@ -5,11 +5,51 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "langchain-cratedb"
 version = "0.0.0"
-description = "An integration package connecting CrateDB and LangChain"
+description = "Integration package connecting CrateDB and LangChain"
 authors = []
 readme = "README.md"
 repository = "https://github.com/crate/langchain-cratedb"
 license = "MIT"
+keywords = [
+  "cratedb",
+  "embeddings",
+  "embedding-vectors",
+  "langchain",
+  "llm",
+  "vdbms",
+  "vector database",
+  "vector store",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX",
+  "Operating System :: Unix",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Communications",
+  "Topic :: Database",
+  "Topic :: Internet",
+  "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+  "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: System :: Archiving",
+  "Topic :: Text Processing",
+  "Topic :: Utilities",
+]
 
 [tool.mypy]
 disallow_untyped_defs = "True"
