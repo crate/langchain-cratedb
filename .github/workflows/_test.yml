@@ -24,6 +24,10 @@ jobs:
           - "3.9"
           - "3.12"
 
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python-version }}
+
     services:
       cratedb:
         image: crate/crate:nightly
@@ -69,3 +73,14 @@ jobs:
           # grep will exit non-zero if the target message isn't found,
           # and `set -e` above will cause the step to fail.
           echo "$STATUS" | grep 'nothing to commit, working tree clean'
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          files: ./coverage.xml
+          flags: main
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: true
