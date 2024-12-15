@@ -51,8 +51,9 @@ jobs:
       - uses: pre-commit/action@v3.0.1
         with:
           extra_args: --all-files --hook-stage=manual
+
   lint:
-    name: cd ${{ matrix.working-directory }}
+    name: "Run linters"
     needs: [ build ]
     if: ${{ needs.build.outputs.dirs-to-lint != '[]' }}
     strategy:
@@ -65,7 +66,7 @@ jobs:
     secrets: inherit
 
   test:
-    name: cd ${{ matrix.working-directory }}
+    name: "Run software tests"
     needs: [ build ]
     if: ${{ needs.build.outputs.dirs-to-test != '[]' }}
     strategy:
