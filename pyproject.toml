@@ -65,6 +65,7 @@ pytest-watcher = "^0.3.4"
 langchain-community = "^0.3.11"
 langchain-tests = "==0.3.7"
 pytest-rerunfailures = "^15.0"
+pytest-mock = "^3.14.0"
 
 [tool.poetry.group.codespell.dependencies]
 codespell = "^2.2.6"
