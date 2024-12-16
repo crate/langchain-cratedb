@@ -120,7 +120,7 @@ codespell = "<2.4"
 [tool.poetry.group.test_integration.dependencies]
 
 [tool.poetry.group.lint.dependencies]
-ruff = "<0.6"
+ruff = "<0.9"
 
 [tool.poetry.group.typing.dependencies]
 mypy = "<1.11"
