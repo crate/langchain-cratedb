@@ -3,6 +3,7 @@ __pycache__
 .idea
 .mypy_cache
 coverage.xml
+dist
 # Don't use `poetry.lock`, because it's a library.
 # https://github.com/python-poetry/poetry/issues/2861
 poetry.lock
