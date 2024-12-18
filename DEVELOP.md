@@ -21,6 +21,12 @@ pytest -vvv -k standard
 pytest -vvv -k cratedb
 ```
 
+## Release
+```shell
+poetry build
+twine upload --skip-existing dist/*{.tar.gz,.whl}
+```
+
 ## Genesis
 
 This package has been bootstrapped using `langchain-cli integration new`,

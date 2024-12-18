@@ -112,8 +112,7 @@ package, and [langchain] itself.
 
 ### Contributing
 The `langchain-cratedb` package is an open source project, and is
-[managed on GitHub]. The project is still in its infancy, and
-we appreciate contributions of any kind.
+[managed on GitHub]. We appreciate contributions of any kind.
 
 ### License
 The project uses the MIT license, like the langchain-postgres project
