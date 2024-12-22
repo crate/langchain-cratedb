@@ -1,7 +1,7 @@
 __pycache__
 .coverage
 .idea
-.mypy_cache
+.mypy_cache*
 coverage.xml
 dist
 # Don't use `poetry.lock`, because it's a library.
