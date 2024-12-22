@@ -5,6 +5,7 @@ from langchain_cratedb.patches import patch_sqlalchemy_dialect
 
 patch_sqlalchemy_dialect()
 
+from langchain_cratedb.cache import CrateDBCache
 from langchain_cratedb.chat_history import CrateDBChatMessageHistory
 from langchain_cratedb.loaders import CrateDBLoader
 from langchain_cratedb.vectorstores import (
@@ -20,6 +21,7 @@ except metadata.PackageNotFoundError:  # pragma: no cover
 del metadata  # optional, avoids polluting the results of dir(__package__)
 
 __all__ = [
+    "CrateDBCache",
     "CrateDBChatMessageHistory",
     "CrateDBLoader",
     "CrateDBVectorStore",
