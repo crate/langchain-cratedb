@@ -12,12 +12,12 @@
 
 » [Documentation]
 | [Changelog]
-| [Community Forum]
 | [PyPI]
 | [Issues]
 | [Source code]
 | [License]
 | [CrateDB]
+| [Community Forum]
 
 The `langchain-cratedb` package implements core LangChain abstractions
 using [CrateDB] or [CrateDB Cloud].
