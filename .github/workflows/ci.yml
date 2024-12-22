@@ -55,7 +55,7 @@ jobs:
   lint:
     name: "Run linters"
     needs: [ build ]
-    if: ${{ needs.build.outputs.dirs-to-lint != '[]' }}
+    if: ${{ needs.build.outputs.dirs-to-lint != '[]' || github.event_name == 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
@@ -68,7 +68,7 @@ jobs:
   test:
     name: "Run software tests"
     needs: [ build ]
-    if: ${{ needs.build.outputs.dirs-to-test != '[]' }}
+    if: ${{ needs.build.outputs.dirs-to-test != '[]' || github.event_name == 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
