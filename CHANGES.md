@@ -3,7 +3,8 @@
 
 ## Unreleased
 - Added implementation and software tests for `CrateDBCache`,
-  deriving from `SQLAlchemyCache`.
+  deriving from `SQLAlchemyCache`, and `CrateDBSemanticCache`,
+  building upon `CrateDBVectorStore`.
 
 ## v0.0.0 - 2024-12-16
 - Make it work
