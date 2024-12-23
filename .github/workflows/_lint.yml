@@ -60,9 +60,9 @@ jobs:
         # It doesn't matter how you change it, any change will cause a cache-bust.
         working-directory: ${{ inputs.working-directory }}
         run: |
-          poetry install --with lint,typing
+          poetry install --with lint,test,test_integration,typing
 
-      - name: Get .mypy_cache to speed up mypy
+      - name: Configure caching for .mypy_cache to speed up mypy
         uses: actions/cache@v4
         env:
           SEGMENT_DOWNLOAD_TIMEOUT_MIN: "2"
@@ -71,27 +71,7 @@ jobs:
             ${{ env.WORKDIR }}/.mypy_cache
           key: mypy-lint-${{ runner.os }}-${{ runner.arch }}-py${{ matrix.python-version }}-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) }}
 
-
-      - name: Analysing the code with our lint
+      - name: Run linters
         working-directory: ${{ inputs.working-directory }}
         run: |
-          make lint_package
-
-      - name: Install unit+integration test dependencies
-        working-directory: ${{ inputs.working-directory }}
-        run: |
-          poetry install --with test,test_integration
-
-      - name: Get .mypy_cache_test to speed up mypy
-        uses: actions/cache@v4
-        env:
-          SEGMENT_DOWNLOAD_TIMEOUT_MIN: "2"
-        with:
-          path: |
-            ${{ env.WORKDIR }}/.mypy_cache_test
-          key: mypy-test-${{ runner.os }}-${{ runner.arch }}-py${{ matrix.python-version }}-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) }}
-
-      - name: Analysing the code with our lint
-        working-directory: ${{ inputs.working-directory }}
-        run: |
-          make lint_tests
+          make lint
