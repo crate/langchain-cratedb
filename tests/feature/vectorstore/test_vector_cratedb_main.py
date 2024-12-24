@@ -174,7 +174,7 @@ def test_cratedb_with_filter_match(engine: sa.Engine) -> None:
         pre_delete_collection=True,
     )
     # TODO: Original:
-    #       assert output == [(Document(page_content="foo", metadata={"page": "0"}), 0.0)]  # noqa: E501
+    #       assert output == [(Document(page_content="foo", metadata={"page": "0"}), 0.0)]  # noqa: E501,ERA001
     output = docsearch.similarity_search_with_score("foo", k=1, filter={"page": "0"})
     prune_document_ids(output)
     docs, scores = zip(*output)
@@ -250,7 +250,7 @@ def test_cratedb_delete_collection(engine: sa.Engine, session: sa.orm.Session) -
     collection_foo = store_foo.get_collection(session)
     collection_bar = store_bar.get_collection(session)
     if collection_foo is None or collection_bar is None:
-        assert False, "Expected CollectionStore objects but received None"
+        raise AssertionError("Expected CollectionStore objects but received None")
     assert collection_foo.embeddings[0].cmetadata == {"document": "foo"}
     assert collection_bar.embeddings[0].cmetadata == {"document": "bar"}
 
@@ -261,7 +261,7 @@ def test_cratedb_delete_collection(engine: sa.Engine, session: sa.orm.Session) -
     collection_foo = store_foo.get_collection(session)
     collection_bar = store_bar.get_collection(session)
     if collection_bar is None:
-        assert False, "Expected CollectionStore object but received None"
+        raise AssertionError("Expected CollectionStore object but received None")
     assert collection_foo is None
     assert collection_bar.embeddings[0].cmetadata == {"document": "bar"}
 
@@ -287,10 +287,9 @@ def test_cratedb_collection_with_metadata(
     )
     collection = cratedb_vector.get_collection(session)
     if collection is None:
-        assert False, "Expected a CollectionStore object but received None"
-    else:
-        assert collection.name == "test_collection"
-        assert collection.cmetadata == {"foo": "bar"}
+        raise AssertionError("Expected a CollectionStore object but received None")
+    assert collection.name == "test_collection"
+    assert collection.cmetadata == {"foo": "bar"}
 
 
 def test_cratedb_collection_no_embedding_dimension(

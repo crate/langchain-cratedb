@@ -32,9 +32,10 @@ lint lint_diff lint_package lint_tests:
 	[ "$(PYTHON_FILES)" = "" ] || poetry run ruff format $(PYTHON_FILES) --diff
 	[ "$(PYTHON_FILES)" = "" ] || mkdir -p $(MYPY_CACHE) && poetry run mypy $(PYTHON_FILES) --cache-dir $(MYPY_CACHE)
 
+# Ignore unused imports (F401), unused variables (F841), `print` statements (T201), and commented-out code (ERA001).
 format format_diff:
 	[ "$(PYTHON_FILES)" = "" ] || poetry run ruff format $(PYTHON_FILES)
-	[ "$(PYTHON_FILES)" = "" ] || poetry run ruff check --select I --fix $(PYTHON_FILES)
+	[ "$(PYTHON_FILES)" = "" ] || poetry run ruff check --fix --ignore=ERA --ignore=F401 --ignore=F841 --ignore=T20 --ignore=ERA001 $(PYTHON_FILES)
 
 spell_check:
 	poetry run codespell --toml pyproject.toml

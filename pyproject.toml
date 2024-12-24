@@ -96,11 +96,49 @@ langchain-postgres = "==0.0.12"
 sqlalchemy-cratedb = ">=0.40.1"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "T201"]
+
+select = [
+  # Builtins
+  "A",
+  # Bugbear
+  "B",
+  # comprehensions
+  "C4",
+  # Pycodestyle
+  "E",
+  # eradicate
+  "ERA",
+  # Pyflakes
+  "F",
+  # isort
+  "I",
+  # pandas-vet
+  "PD",
+  # return
+  "RET",
+  # Bandit
+  "S",
+  # print
+  "T20",
+  "W",
+  # flake8-2020
+  "YTT",
+]
 
 [tool.ruff.lint.per-file-ignores]
-"docs/*.ipynb" = ["F401", "F821", "T201"]
-"examples/*.py" = ["F401", "F821", "T201"]
+"docs/*.ipynb" = [
+  "F401",
+  "F821",
+  "T201",
+  "ERA001",  # Found commented-out code
+]
+"examples/*.py" = [
+  "F401",
+  "F821",
+  "T20",  # `print` found.
+]
+"tests/*" = ["S101"]  # Use of `assert` detected
+".github/scripts/*" = ["S101"]  # Use of `assert` detected
 
 [tool.coverage.run]
 omit = [

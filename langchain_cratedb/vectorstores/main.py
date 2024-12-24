@@ -295,7 +295,7 @@ class CrateDBVectorStore(PGVector):
         # CrateDB: Calling ``delete`` must not raise an exception
         #          when deleting IDs that do not exist.
         if self.EmbeddingStore is None:
-            return
+            return None
         return super().delete(ids=ids, collection_only=collection_only, **kwargs)
 
     def _ensure_storage(self) -> None:
@@ -367,7 +367,7 @@ class CrateDBVectorStore(PGVector):
 
     def _results_to_docs_and_scores(self, results: Any) -> List[Tuple[Document, float]]:
         """Return docs and scores from results."""
-        docs = [
+        return [
             (
                 Document(
                     id=str(result.EmbeddingStore.id),
@@ -378,7 +378,6 @@ class CrateDBVectorStore(PGVector):
             )
             for result in results
         ]
-        return docs
 
     def get_by_ids(self, ids: Sequence[str], /) -> List[Document]:
         """Get documents by ids."""
@@ -447,9 +446,9 @@ class CrateDBVectorStore(PGVector):
         self,
         embedding: List[float],
         k: int = 4,
-        filter: Optional[dict] = None,
+        filter: Optional[dict] = None,  # noqa: A002
     ) -> List[Tuple[Document, float]]:
-        assert not self._async_engine, "This method must be called without async_mode"
+        assert not self._async_engine, "This method must be called without async_mode"  # noqa: S101
         results = self.__query_collection(embedding=embedding, k=k, filter=filter)
 
         return self._results_to_docs_and_scores(results)
@@ -460,7 +459,7 @@ class CrateDBVectorStore(PGVector):
         k: int = 4,
         fetch_k: int = 20,
         lambda_mult: float = 0.5,
-        filter: Optional[Dict[str, str]] = None,
+        filter: Optional[Dict[str, str]] = None,  # noqa: A002
         **kwargs: Any,
     ) -> List[Tuple[Document, float]]:
         """Return docs selected using the maximal marginal relevance with score
@@ -486,7 +485,7 @@ class CrateDBVectorStore(PGVector):
         """
         import numpy as np
 
-        assert not self._async_engine, "This method must be called without async_mode"
+        assert not self._async_engine, "This method must be called without async_mode"  # noqa: S101
         results = self.__query_collection(embedding=embedding, k=fetch_k, filter=filter)
 
         embedding_list = [result.EmbeddingStore.embedding for result in results]
@@ -506,7 +505,7 @@ class CrateDBVectorStore(PGVector):
         self,
         embedding: List[float],
         k: int = 4,
-        filter: Optional[Dict[str, str]] = None,
+        filter: Optional[Dict[str, str]] = None,  # noqa: A002
     ) -> List[Any]:
         """Query the collection."""
         self._init_models(embedding)
@@ -523,7 +522,7 @@ class CrateDBVectorStore(PGVector):
         collections: List[Any],
         embedding: List[float],
         k: int = 4,
-        filter: Optional[Dict[str, str]] = None,
+        filter: Optional[Dict[str, str]] = None,  # noqa: A002
     ) -> List[Any]:
         """Query the collection."""
         self._init_models(embedding)
@@ -547,7 +546,7 @@ class CrateDBVectorStore(PGVector):
                     self.EmbeddingStore,
                     # TODO: Original pgvector code uses `self.distance_strategy`.
                     #       CrateDB currently only supports EUCLIDEAN.
-                    #       self.distance_strategy(embedding).label("distance")
+                    #       self.distance_strategy(embedding).label("distance")  # noqa: E501,ERA001
                     sa.func.vector_similarity(
                         self.EmbeddingStore.embedding,
                         # TODO: Just reference the `embedding` symbol here, don't
@@ -649,13 +648,13 @@ class CrateDBVectorStore(PGVector):
             # native is trusted input
             native = COMPARISONS_TO_NATIVE[operator]
             return self.EmbeddingStore.cmetadata[field].op(native)(filter_value)
-        elif operator == "$between":
+        if operator == "$between":
             # Use AND with two comparisons
             low, high = filter_value
             lower_bound = self.EmbeddingStore.cmetadata[field].op(">=")(low)
             upper_bound = self.EmbeddingStore.cmetadata[field].op("<=")(high)
             return sa.and_(lower_bound, upper_bound)
-        elif operator in {"$in", "$nin", "$like", "$ilike"}:
+        if operator in {"$in", "$nin", "$like", "$ilike"}:
             # We'll do force coercion to text
             if operator in {"$in", "$nin"}:
                 for val in filter_value:
@@ -673,15 +672,14 @@ class CrateDBVectorStore(PGVector):
 
             if operator in {"$in"}:
                 return queried_field.in_([str(val) for val in filter_value])
-            elif operator in {"$nin"}:
+            if operator in {"$nin"}:
                 return ~queried_field.in_([str(val) for val in filter_value])
-            elif operator in {"$like"}:
+            if operator in {"$like"}:
                 return queried_field.like(filter_value)
-            elif operator in {"$ilike"}:
+            if operator in {"$ilike"}:
                 return queried_field.ilike(filter_value)
-            else:
-                raise NotImplementedError()
-        elif operator == "$exists":
+            raise NotImplementedError()
+        if operator == "$exists":
             if not isinstance(filter_value, bool):
                 raise ValueError(
                     "Expected a boolean value for $exists "
@@ -691,5 +689,4 @@ class CrateDBVectorStore(PGVector):
                 sa.func.any(sa.func.object_keys(self.EmbeddingStore.cmetadata))
             )
             return condition if filter_value else ~condition
-        else:
-            raise NotImplementedError()
+        raise NotImplementedError()

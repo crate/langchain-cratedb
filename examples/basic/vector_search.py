@@ -52,7 +52,7 @@ def get_documents() -> t.List[Document]:
 
     # Load a document, and split it into chunks.
     url = "https://github.com/langchain-ai/langchain/raw/v0.0.325/docs/docs/modules/state_of_the_union.txt"
-    text = requests.get(url).text
+    text = requests.get(url, timeout=10).text
     return text_splitter.create_documents([text])
 
 

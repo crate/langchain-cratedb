@@ -50,7 +50,7 @@ def import_mlb_teams_2012() -> None:
     db = SQLDatabase.from_uri(CRATEDB_SQLALCHEMY_URL)
     # TODO: Use new URL @ langchain-cratedb.
     url = "https://github.com/crate-workbench/langchain/raw/cratedb/docs/docs/integrations/document_loaders/example_data/mlb_teams_2012.sql"
-    sql = requests.get(url).text
+    sql = requests.get(url, timeout=10).text
     for statement in sqlparse.split(sql):
         db.run(statement)
     db.run("REFRESH TABLE mlb_teams_2012")

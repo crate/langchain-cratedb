@@ -42,7 +42,7 @@ def ensure_collection(session: sa.orm.Session, name: str) -> None:
     try:
         session.execute(
             sa.text(
-                f"INSERT INTO {COLLECTION_TABLE_NAME} (uuid, name, cmetadata) "
+                f"INSERT INTO {COLLECTION_TABLE_NAME} (uuid, name, cmetadata) "  # noqa: S608
                 f"VALUES ('uuid-{name}', '{name}', {{}});"
             )
         )

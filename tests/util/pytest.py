@@ -30,7 +30,7 @@ def run_module_function(
         try:
             mod = importlib.import_module(path.stem)
         except ImportError as ex:
-            raise ImportError(f"Module not found at {filepath}: {ex}")
+            raise ImportError(f"Module not found at {filepath}: {ex}") from ex
         fun = getattr(mod, entrypoint)
 
         # Wrap the entrypoint function into a pytest test case, and run it.
