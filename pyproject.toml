@@ -5,31 +5,46 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "langchain-cratedb"
 version = "0.0.0"
-description = "Integration package connecting CrateDB and LangChain"
+description = "Use LangChain with CrateDB"
 authors = []
 readme = "README.md"
 repository = "https://github.com/crate/langchain-cratedb"
 license = "MIT"
 keywords = [
+  "ai",
+  "artificial intelligence",
   "cratedb",
-  "embeddings",
-  "embedding-vectors",
+  "embedding vectors",
+  "fulltext search",
   "langchain",
   "llm",
+  "machine learning",
+  "ml",
+  "rag",
+  "semantic search",
   "vdbms",
+  "vector embeddings",
   "vector database",
+  "vector search",
   "vector store",
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Environment :: No Input/Output (Daemon)",
+  "Environment :: Plugins",
+  "Environment :: Web Environment",
+  "Intended Audience :: Customer Service",
   "Intended Audience :: Developers",
   "Intended Audience :: Education",
+  "Intended Audience :: End Users/Desktop",
   "Intended Audience :: Information Technology",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
   "Operating System :: MacOS",
   "Operating System :: POSIX",
   "Operating System :: Unix",
+  "Programming Language :: ML",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.9",
@@ -39,15 +54,26 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Topic :: Communications",
   "Topic :: Database",
+  "Topic :: Documentation",
+  "Topic :: Education :: Computer Aided Instruction (CAI)",
   "Topic :: Internet",
   "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+  "Topic :: Printing",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
   "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Topic :: Scientific/Engineering :: Image Recognition",
   "Topic :: Scientific/Engineering :: Information Analysis",
   "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
   "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Code Generators",
   "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Pre-processors",
   "Topic :: System :: Archiving",
   "Topic :: Text Processing",
+  "Topic :: Text Processing :: Filters",
+  "Topic :: Text Processing :: Indexing",
+  "Topic :: Text Processing :: Linguistic",
   "Topic :: Utilities",
 ]
 
@@ -105,14 +131,14 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 
 [tool.poetry.group.test.dependencies]
-pytest = "<9"
 langchain-tests = "==0.3.7"
+pytest = "<9"
 pytest-asyncio = "<0.26"
+pytest-cov = "<7"
 pytest-mock = "<4"
 pytest-rerunfailures = "<16"
 pytest-socket = "<0.8"
 pytest-watcher = "<0.5"
-pytest-cov = "<7"
 testbook = "<0.5"
 
 [tool.poetry.group.codespell.dependencies]
