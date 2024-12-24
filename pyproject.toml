@@ -69,6 +69,10 @@ sqlalchemy-cratedb = ">=0.40.1"
 [tool.ruff.lint]
 select = ["E", "F", "I", "T201"]
 
+[tool.ruff.lint.per-file-ignores]
+"docs/*.ipynb" = ["F401", "F821", "T201"]
+"examples/*.py" = ["F401", "F821", "T201"]
+
 [tool.coverage.run]
 omit = [
     "langchain_cratedb/retrievers.py",
@@ -113,6 +117,7 @@ pytest-rerunfailures = "<16"
 pytest-socket = "<0.8"
 pytest-watcher = "<0.5"
 pytest-cov = "<7"
+testbook = "<0.5"
 
 [tool.poetry.group.codespell.dependencies]
 codespell = "<2.4"
