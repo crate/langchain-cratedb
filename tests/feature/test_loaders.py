@@ -11,7 +11,7 @@ from langchain_community.document_loaders.sql_database import SQLDatabaseLoader
 from langchain_community.utilities.sql_database import SQLDatabase
 
 from langchain_cratedb import CrateDBLoader
-from tests.data import MLB_TEAMS_2012_SQL
+from tests.fixtures.data import MLB_TEAMS_2012_SQL
 
 logging.basicConfig(level=logging.DEBUG)
 

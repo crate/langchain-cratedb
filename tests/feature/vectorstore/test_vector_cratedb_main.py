@@ -22,7 +22,7 @@ from tests.feature.vectorstore.util import (
     ensure_collection,
     prune_document_ids,
 )
-from tests.fixtures.filtering_test_cases import (
+from tests.fixtures.metadata_filtering import (
     DOCUMENTS,
     TYPE_1_FILTERING_TEST_CASES,
     TYPE_2_FILTERING_TEST_CASES,

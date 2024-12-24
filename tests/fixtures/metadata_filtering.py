@@ -1,4 +1,4 @@
-"""Module needs to move to a stasndalone package."""
+"""Fixtures for vector store test cases doing metadata filtering."""
 
 from langchain_core.documents import Document
 
