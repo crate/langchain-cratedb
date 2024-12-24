@@ -13,6 +13,15 @@ from langchain_core.embeddings import Embeddings
 from langchain_cratedb.vectorstores import (
     CrateDBVectorStore,
 )
+from tests.feature.vectorstore.fake_embeddings import (
+    ADA_TOKEN_COUNT,
+    ConsistentFakeEmbeddingsWithAdaDimension,
+    FakeEmbeddingsWithAdaDimension,
+)
+from tests.feature.vectorstore.util import (
+    ensure_collection,
+    prune_document_ids,
+)
 from tests.fixtures.filtering_test_cases import (
     DOCUMENTS,
     TYPE_1_FILTERING_TEST_CASES,
@@ -22,16 +31,7 @@ from tests.fixtures.filtering_test_cases import (
     TYPE_5_FILTERING_TEST_CASES,
     TYPE_6_FILTERING_TEST_CASES,
 )
-from tests.integration_tests.conftest import CONNECTION_STRING
-from tests.integration_tests.vectorstore.fake_embeddings import (
-    ADA_TOKEN_COUNT,
-    ConsistentFakeEmbeddingsWithAdaDimension,
-    FakeEmbeddingsWithAdaDimension,
-)
-from tests.integration_tests.vectorstore.util import (
-    ensure_collection,
-    prune_document_ids,
-)
+from tests.settings import CONNECTION_STRING
 
 
 def _compare_documents(left: Sequence[Document], right: Sequence[Document]) -> None:

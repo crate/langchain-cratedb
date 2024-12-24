@@ -5,11 +5,11 @@ import sqlalchemy as sa
 from langchain_core.documents import Document
 
 from langchain_cratedb import CrateDBVectorStore, CrateDBVectorStoreMultiCollection
-from tests.integration_tests.vectorstore.fake_embeddings import (
+from tests.feature.vectorstore.fake_embeddings import (
     ConsistentFakeEmbeddingsWithAdaDimension,
     FakeEmbeddingsWithAdaDimension,
 )
-from tests.integration_tests.vectorstore.util import prune_document_ids
+from tests.feature.vectorstore.util import prune_document_ids
 
 
 @pytest.mark.flaky(reruns=5)

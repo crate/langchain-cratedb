@@ -85,7 +85,6 @@ addopts = """
   --cov --cov-report=term-missing --cov-report=xml
 """
 markers = [
-    "compile: mark placeholder test used to compile integration tests without running them",
 ]
 asyncio_mode = "auto"
 log_level = "DEBUG"
@@ -95,9 +94,6 @@ log_cli_level = "DEBUG"
 optional = true
 
 [tool.poetry.group.codespell]
-optional = true
-
-[tool.poetry.group.test_integration]
 optional = true
 
 [tool.poetry.group.lint]
@@ -121,8 +117,6 @@ testbook = "<0.5"
 
 [tool.poetry.group.codespell.dependencies]
 codespell = "<2.4"
-
-[tool.poetry.group.test_integration.dependencies]
 
 [tool.poetry.group.lint.dependencies]
 ruff = "<0.9"
