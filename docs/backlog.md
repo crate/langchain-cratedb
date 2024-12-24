@@ -11,6 +11,12 @@
 - Release 0.1.0
 
 ## Iteration +2
+- Cache: Demonstrate offline use, using open-source LLM. Ollama?
+  Infinity? https://michaelfeil.eu/infinity/0.0.73/integrations/
+- Notebooks: Use jupytext?
+- Import example programs from cratedb-examples
+
+## Iteration +2
 - Documentation: Improve `as_retriever` feature:
   - https://python.langchain.com/docs/tutorials/retrievers/#retrievers
   - https://python.langchain.com/api_reference/mongodb/vectorstores/langchain_mongodb.vectorstores.MongoDBAtlasVectorSearch.html
