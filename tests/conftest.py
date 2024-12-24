@@ -5,6 +5,7 @@ import sqlalchemy as sa
 
 from langchain_cratedb.vectorstores.model import ModelFactory
 from tests.settings import CONNECTION_STRING
+from tests.util.python import run_file  # noqa: F401
 
 
 @pytest.fixture
