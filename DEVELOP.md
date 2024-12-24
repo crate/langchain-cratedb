@@ -4,16 +4,31 @@
 ```shell
 git clone https://github.com/crate/langchain-cratedb.git
 cd langchain-cratedb
-poetry install --with test,test_integration
+poetry install --with lint,test,typing
 ```
 
-## Run software tests
-Run all tests.
+## Run CrateDB
 ```shell
-make test
-make integration_test
+docker run --rm \
+  --publish=4200:4200 --publish=5432:5432 --env=CRATE_HEAP_SIZE=2g \
+  crate:latest -Cdiscovery.type=single-node
 ```
+
+## Validate codebase
+Run linters and software tests.
+```shell
+make check
+```
+Format code.
+```shell
+make format
+```
+
+## Software tests
 Run tests selectively.
+```shell
+pytest -vvv tests/test_docs.py tests/test_examples.py
+```
 ```shell
 pytest -vvv -k standard
 ```

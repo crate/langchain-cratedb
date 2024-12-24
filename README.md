@@ -44,7 +44,7 @@ toolkit and the ultra-fast indexing capabilities of CrateDB.
 
 You can apply [LangChain] to implement text-based applications using commercial
 models, for example provided by [OpenAI], or open-source models, for example
-multilingual text-only and text-image models provided by [Llama], and many more.
+Meta's [Llama] multilingual text-only and text-image models.
 
 ## Installation
 
@@ -58,9 +58,8 @@ The package currently supports CrateDB and its Python DB API driver,
 available per [crate] package. It will be automatically installed
 when installing the LangChain adapter.
 
-You can run [CrateDB Self-Managed], see [CrateDB Installation], or
-use [CrateDB Cloud], the installation-free variant, see
-[CrateDB Cloud Console].
+You can run [CrateDB Self-Managed] or start using [CrateDB Cloud],
+see [CrateDB Installation], or [CrateDB Cloud Console].
 
 ## Usage
 
