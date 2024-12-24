@@ -512,8 +512,8 @@ class CrateDBVectorStore(PGVector):
         self._init_models(embedding)
         with self._make_sync_session() as session:
             collection = self.get_collection(session)
-            if not collection:
-                raise ValueError("Collection not found")
+            if collection is None:
+                raise ValueError(f"Collection not found: {self.collection_name}")
             return self._query_collection_multi(
                 collections=[collection], embedding=embedding, k=k, filter=filter
             )
