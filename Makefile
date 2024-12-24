@@ -1,23 +1,18 @@
-.PHONY: all format lint test tests integration_tests docker_tests help extended_tests
+.PHONY: all format lint test tests help
 
 # Default target executed when no arguments are given to make.
 all: help
 
 # Define a variable for the test file path.
-TEST_FILE ?= tests/unit_tests/
-integration_test integration_tests: TEST_FILE = tests/integration_tests/
+TEST_FILE ?= tests/
 
-
-# unit tests are run with the --disable-socket flag to prevent network calls
+# Run all software tests
 test tests:
-	poetry run pytest --disable-socket --allow-unix-socket $(TEST_FILE)
+	poetry run pytest $(TEST_FILE)
 
 test_watch:
 	poetry run ptw --snapshot-update --now . -- -vv $(TEST_FILE)
 
-# integration tests are run without the --disable-socket flag to allow network calls
-integration_test integration_tests:
-	poetry run pytest $(TEST_FILE)
 
 ######################
 # LINTING AND FORMATTING
@@ -50,6 +45,8 @@ spell_fix:
 check_imports: $(shell find langchain_cratedb -name '*.py')
 	poetry run python ./scripts/check_imports.py $^
 
+check: lint test
+
 ######################
 # HELP
 ######################
@@ -59,6 +56,6 @@ help:
 	@echo 'check_imports				- check imports'
 	@echo 'format                       - run code formatters'
 	@echo 'lint                         - run linters'
-	@echo 'test                         - run unit tests'
-	@echo 'tests                        - run unit tests'
+	@echo 'test                         - run tests'
+	@echo 'tests                        - run tests'
 	@echo 'test TEST_FILE=<test_file>   - run all tests in file'

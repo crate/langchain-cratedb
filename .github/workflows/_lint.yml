@@ -60,7 +60,7 @@ jobs:
         # It doesn't matter how you change it, any change will cause a cache-bust.
         working-directory: ${{ inputs.working-directory }}
         run: |
-          poetry install --with lint,test,test_integration,typing
+          poetry install --with lint,test,typing
 
       - name: Configure caching for .mypy_cache to speed up mypy
         uses: actions/cache@v4
