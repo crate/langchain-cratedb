@@ -1,22 +1,10 @@
-import os
 import typing as t
 
 import pytest
 import sqlalchemy as sa
 
-from langchain_cratedb import CrateDBVectorStore
 from langchain_cratedb.vectorstores.model import ModelFactory
-
-SCHEMA_NAME = os.environ.get("TEST_CRATEDB_DATABASE", "testdrive")
-
-CONNECTION_STRING = CrateDBVectorStore.connection_string_from_db_params(
-    driver=os.environ.get("TEST_CRATEDB_DRIVER", "crate"),
-    host=os.environ.get("TEST_CRATEDB_HOST", "localhost"),
-    port=int(os.environ.get("TEST_CRATEDB_PORT", "4200")),
-    database=SCHEMA_NAME,
-    user=os.environ.get("TEST_CRATEDB_USER", "crate"),
-    password=os.environ.get("TEST_CRATEDB_PASSWORD", ""),
-)
+from tests.settings import CONNECTION_STRING
 
 
 @pytest.fixture
