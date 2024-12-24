@@ -33,10 +33,9 @@ from langchain_core.outputs import Generation
 def cache(request: FixtureRequest, engine: sa.Engine) -> BaseCache:
     if request.param == "memory":
         return InMemoryCache()
-    elif request.param == "cratedb":
+    if request.param == "cratedb":
         return CrateDBCache(engine=engine)
-    else:
-        raise NotImplementedError(f"Cache type not implemented: {request.param}")
+    raise NotImplementedError(f"Cache type not implemented: {request.param}")
 
 
 @pytest.fixture(autouse=True)
@@ -213,4 +212,4 @@ async def test_llm_cache_clear() -> None:
 def create_llm_string(llm: Union[BaseLLM, BaseChatModel]) -> str:
     _dict: Dict = llm.dict()
     _dict["stop"] = None
-    return str(sorted([(k, v) for k, v in _dict.items()]))
+    return str(sorted(_dict.items()))
