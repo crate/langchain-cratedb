@@ -127,12 +127,13 @@ select = [
 
 [tool.ruff.lint.per-file-ignores]
 "docs/*.ipynb" = [
+  "ERA001",  # Found commented-out code
   "F401",
   "F821",
   "T201",
-  "ERA001",  # Found commented-out code
 ]
 "examples/*.py" = [
+  "ERA001",  # Found commented-out code
   "F401",
   "F821",
   "T20",  # `print` found.
