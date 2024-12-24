@@ -44,7 +44,6 @@ def test_file(run_file: t.Callable, file: Path) -> None:
     except openai.OpenAIError as ex:
         if "The api_key client option must be set" not in str(ex):
             raise
-        else:
-            raise pytest.skip(
-                "Skipping test because `OPENAI_API_KEY` is not defined"
-            ) from ex
+        raise pytest.skip(
+            "Skipping test because `OPENAI_API_KEY` is not defined"
+        ) from ex

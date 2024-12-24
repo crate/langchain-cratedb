@@ -51,7 +51,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
             None, DBConnection, sa.Engine, sa.ext.asyncio.AsyncEngine, str
         ] = None,
         embedding_length: Optional[int] = None,
-        collection_names: List[str] = [_LANGCHAIN_DEFAULT_COLLECTION_NAME],
+        collection_names: Optional[List[str]] = None,
         collection_metadata: Optional[dict] = None,
         distance_strategy: DistanceStrategy = DEFAULT_DISTANCE_STRATEGY,
         pre_delete_collection: bool = False,
@@ -90,7 +90,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         self.async_mode = async_mode
         self.embedding_function = embeddings
         self._embedding_length = embedding_length
-        self.collection_names = collection_names
+        self.collection_names = collection_names or [_LANGCHAIN_DEFAULT_COLLECTION_NAME]
         self.collection_metadata = collection_metadata
         self._distance_strategy = distance_strategy
         self.pre_delete_collection = pre_delete_collection
@@ -150,9 +150,9 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         self,
         embedding: List[float],
         k: int = 4,
-        filter: Optional[dict] = None,
+        filter: Optional[dict] = None,  # noqa: A002
     ) -> List[Tuple[Document, float]]:
-        assert not self._async_engine, "This method must be called without async_mode"
+        assert not self._async_engine, "This method must be called without async_mode"  # noqa: S101
         results = self.__query_collection(embedding=embedding, k=k, filter=filter)
 
         return self._results_to_docs_and_scores(results)
@@ -163,7 +163,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         k: int = 4,
         fetch_k: int = 20,
         lambda_mult: float = 0.5,
-        filter: Optional[Dict[str, str]] = None,
+        filter: Optional[Dict[str, str]] = None,  # noqa: A002
         **kwargs: Any,
     ) -> List[Tuple[Document, float]]:
         """Return docs selected using the maximal marginal relevance with score
@@ -189,7 +189,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         """
         import numpy as np
 
-        assert not self._async_engine, "This method must be called without async_mode"
+        assert not self._async_engine, "This method must be called without async_mode"  # noqa: S101
         results = self.__query_collection(embedding=embedding, k=fetch_k, filter=filter)
 
         embedding_list = [result.EmbeddingStore.embedding for result in results]
@@ -209,7 +209,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         self,
         embedding: List[float],
         k: int = 4,
-        filter: Optional[Dict[str, str]] = None,
+        filter: Optional[Dict[str, str]] = None,  # noqa: A002
     ) -> List[Any]:
         """Query multiple collections."""
         self._init_models(embedding)

@@ -25,7 +25,7 @@ class ModelFactory:
         Base: Any = declarative_base()
 
         # Optional: Use a custom schema for the langchain tables.
-        # Base = declarative_base(metadata=MetaData(schema="langchain"))  # type: Any
+        # Base = declarative_base(metadata=MetaData(schema="langchain"))  # type: Any  # noqa: E501,ERA001
 
         class BaseModel(Base):
             """Base model for the SQL stores."""
