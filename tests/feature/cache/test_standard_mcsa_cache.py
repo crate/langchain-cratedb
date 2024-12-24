@@ -28,7 +28,7 @@ def test_memcached_cache(cache: BaseCache) -> None:
 
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
     get_llm_cache().update("foo", llm_string, [Generation(text="fizz")])
     output = llm.generate(["foo"])
     expected_output = LLMResult(
@@ -48,7 +48,7 @@ def test_memcached_cache_flush(cache: BaseCache) -> None:
 
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
     get_llm_cache().update("foo", llm_string, [Generation(text="fizz")])
     output = llm.generate(["foo"])
     expected_output = LLMResult(
@@ -79,7 +79,7 @@ def test_sqlalchemy_cache(engine: sa.Engine) -> None:
         __tablename__ = "llm_cache_fulltext"
         # TODO: Original. Can it be converged by adding a polyfill to
         #       `sqlalchemy-cratedb`?
-        # id = Column(Integer, Sequence("cache_id"), primary_key=True)
+        # id = Column(Integer, Sequence("cache_id"), primary_key=True)  # noqa: ERA001
         id = sa.Column(sa.BigInteger, server_default=sa.func.now(), primary_key=True)
         prompt = sa.Column(sa.String, nullable=False)
         llm = sa.Column(sa.String, nullable=False)
@@ -92,7 +92,7 @@ def test_sqlalchemy_cache(engine: sa.Engine) -> None:
     llm = FakeLLM()
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
     get_llm_cache().update("foo", llm_string, [Generation(text="fizz")])
     output = llm.generate(["foo", "bar", "foo"])
     expected_cache_output = [Generation(text="foo")]

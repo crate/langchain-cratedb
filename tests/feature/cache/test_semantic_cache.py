@@ -18,7 +18,7 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.outputs import ChatGeneration, Generation, LLMResult
 
 from langchain_cratedb import CrateDBSemanticCache
-from tests.integration_tests.cache.fake_embeddings import (
+from tests.feature.cache.fake_embeddings import (
     ConsistentFakeEmbeddings,
     FakeEmbeddings,
 )
@@ -50,7 +50,7 @@ def test_semantic_cache_single(engine: sa.Engine) -> None:
     llm = FakeLLM()
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
     get_llm_cache().update("foo", llm_string, [Generation(text="fizz")])
     cache_output = get_llm_cache().lookup("bar", llm_string)
     assert cache_output == [Generation(text="fizz")]
@@ -76,7 +76,7 @@ def test_semantic_cache_multi(engine: sa.Engine) -> None:
     llm = FakeLLM()
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
     get_llm_cache().update(
         "foo", llm_string, [Generation(text="fizz"), Generation(text="Buzz")]
     )
@@ -106,7 +106,7 @@ def test_semantic_cache_chat(engine: sa.Engine) -> None:
     llm = FakeChatModel()
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
     prompt: t.List[BaseMessage] = [HumanMessage(content="foo")]
     llm_cache = t.cast(CrateDBSemanticCache, get_llm_cache())
     llm_cache.update(
@@ -131,6 +131,7 @@ def test_semantic_cache_chat(engine: sa.Engine) -> None:
         ([random_string()], [[random_string(), random_string()]]),
         # Single prompt, multiple generations
         ([random_string()], [[random_string(), random_string(), random_string()]]),
+        # ruff: noqa: ERA001
         # Multiple prompts, multiple generations
         # (
         #    [random_string(), random_string()],
@@ -165,7 +166,7 @@ def test_semantic_cache_hit(
     llm = FakeLLM()
     params = llm.dict()
     params["stop"] = None
-    llm_string = str(sorted([(k, v) for k, v in params.items()]))
+    llm_string = str(sorted(params.items()))
 
     llm_generations = [
         [

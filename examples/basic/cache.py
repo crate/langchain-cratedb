@@ -23,11 +23,11 @@ from langchain_cratedb import CrateDBCache, CrateDBSemanticCache
 """
 Prerequisites: Because this program uses OpenAI's APIs, you need to supply an
 authentication token. Either set the environment variable `OPENAI_API_KEY`,
-or optionally configure your token here.
+or optionally configure your token here after enabling the code fragment.
 """
-_ = os.environ.setdefault(
-    "OPENAI_API_KEY", "sk-XJZ7pfog5Gp8Kus8D--invalid--0CJ5lyAKSefZLaV1Y9S1"
-)
+# _ = os.environ.setdefault(
+#    "OPENAI_API_KEY", "sk-XJZ7pfog5Gp8Kus8D--invalid--0CJ5lyAKSefZLaV1Y9S1"
+# )
 
 
 def standard_cache() -> None:
@@ -95,9 +95,13 @@ def semantic_cache() -> None:
     set_llm_cache(None)
 
 
-if __name__ == "__main__":
+def main() -> None:
     standard_cache()
     semantic_cache()
+
+
+if __name__ == "__main__":
+    main()
 
 
 """

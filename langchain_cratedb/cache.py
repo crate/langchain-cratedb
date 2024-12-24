@@ -147,7 +147,7 @@ class CrateDBSemanticCache(BaseCache):
         metadata = {
             "llm_string": llm_string,
             "prompt": prompt,
-            "return_val": dumps([g for g in return_val]),
+            "return_val": dumps(list(return_val)),
         }
         llm_cache.add_texts(texts=[prompt], metadatas=[metadata])
 
