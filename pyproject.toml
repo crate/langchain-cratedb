@@ -172,6 +172,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 
 [tool.poetry.group.test.dependencies]
+langchain-huggingface = "<0.2"
 langchain-openai = "<0.3"
 langchain-tests = "==0.3.7"
 notebook = "<7.4"
