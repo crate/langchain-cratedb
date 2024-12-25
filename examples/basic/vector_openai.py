@@ -34,12 +34,18 @@ import requests
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import (
+    ExperimentalMarkdownSyntaxTextSplitter,
+    MarkdownTextSplitter,
+)
 
 from langchain_cratedb import CrateDBVectorStore
 
 CRATEDB_SQLALCHEMY_URL = os.environ.get(
     "CRATEDB_SQLALCHEMY_URL", "crate://crate@localhost/?schema=testdrive"
 )
+# TODO: Change URL to repository after merging.
+RESOURCE_URL = "https://gist.github.com/amotl/a5dd9814d1865b14248ca97eb8075f96/raw/Universal_Declaration_of_Human_Rights.md"
 
 
 def get_documents() -> t.List[Document]:
@@ -48,27 +54,33 @@ def get_documents() -> t.List[Document]:
     """
 
     # Define text splitter.
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    text_splitter = MarkdownTextSplitter(chunk_size=350, chunk_overlap=0)
 
     # Load a document, and split it into chunks.
-    url = "https://github.com/langchain-ai/langchain/raw/v0.0.325/docs/docs/modules/state_of_the_union.txt"
-    text = requests.get(url, timeout=10).text
+    text = requests.get(RESOURCE_URL, timeout=10).text
     return text_splitter.create_documents([text])
 
 
 def main() -> None:
+    # Set up LLM.
+    embeddings = OpenAIEmbeddings()
+
     # Acquire documents.
     documents = get_documents()
 
     # Embed each chunk, and load them into the vector store.
     vector_store = CrateDBVectorStore.from_documents(
-        documents, OpenAIEmbeddings(), connection=CRATEDB_SQLALCHEMY_URL
+        documents=documents,
+        embedding=embeddings,
+        connection=CRATEDB_SQLALCHEMY_URL,
     )
 
     # Invoke a query, and display the first result.
-    query = "What did the president say about Ketanji Brown Jackson"
+    query = "What does the declaration say about freedom?"
     docs = vector_store.similarity_search(query)
-    print(docs[0].page_content)
+    for doc in docs:
+        print("=" * 42)
+        print(doc.page_content)
 
 
 if __name__ == "__main__":
