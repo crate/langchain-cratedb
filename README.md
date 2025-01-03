@@ -101,6 +101,21 @@ in a CrateDB table, for supporting conversational memory.
 
 - [Example: Chat message history]
 
+### Full Cache
+
+The standard / full cache avoids invoking the LLM when the supplied
+prompt is exactly the same as one encountered already.
+
+- [Example: CrateDBCache]
+
+### Semantic Cache
+
+The semantic cache allows users to retrieve cached prompts based on semantic
+similarity between the user input and previously cached inputs, also avoiding
+to invoke the LLM when not needed.
+
+- [Example: CrateDBSemanticCache]
+
 
 ## Project Information
 
@@ -128,6 +143,8 @@ it is deriving from.
 [crate]: https://pypi.org/project/crate/
 [Example: Advanced RAG with use case]: https://github.com/crate/cratedb-examples/blob/main/topic/machine-learning/llm-langchain/cratedb_rag_customer_support_langchain.ipynb
 [Example: Chat message history]: https://github.com/crate/cratedb-examples/blob/main/topic/machine-learning/llm-langchain/conversational_memory.ipynb
+[Example: CrateDBCache]: https://github.com/crate/langchain-cratedb/blob/main/examples/basic/cache.py
+[Example: CrateDBSemanticCache]: https://github.com/crate/langchain-cratedb/blob/main/examples/basic/cache.py
 [Example: Basic RAG]: https://github.com/crate/cratedb-examples/blob/main/topic/machine-learning/llm-langchain/cratedb_rag_customer_support.ipynb
 [Example: Basic vector search]: https://github.com/crate/cratedb-examples/blob/main/topic/machine-learning/llm-langchain/vector_search.ipynb
 [Example: Load data from database table]: https://github.com/crate/cratedb-examples/blob/main/topic/machine-learning/llm-langchain/document_loader.ipynb
