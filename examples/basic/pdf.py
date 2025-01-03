@@ -32,10 +32,13 @@ Synopsis::
 
 import os
 import typing as t
+from pathlib import Path
 
-from langchain_community.document_loaders import PyPDFLoader
+import requests
+from langchain_community.document_loaders import PyPDFLoader, UnstructuredPDFLoader
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_cratedb import CrateDBVectorStore
@@ -51,11 +54,26 @@ def get_documents() -> t.List[Document]:
     Acquire data, return as LangChain documents.
     """
 
-    # Define text splitter.
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+    loader = UnstructuredPDFLoader(
+        "EP0666666B1.pdf",
+        #mode="elements",
+        #strategy="fast",
+    )
+    data = loader.load()
+    print("data:", data)
+    return data
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=350, chunk_overlap=0)
+
+    # Load a document, and split it into chunks.
+    text = Path("EP0666666B1.md").read_text()
+    return text_splitter.create_documents([text])
 
     # Define resource loader.
     loader = PyPDFLoader(RESOURCE_URL)
+
+    # Define text splitter.
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
 
     # Load PDF pages and split into fragments.
     fragments = []
@@ -67,8 +85,8 @@ def get_documents() -> t.List[Document]:
 
 def main() -> None:
     # Set up LLM.
-    # embeddings = OpenAIEmbeddings()  # noqa: ERA001
-    # """
+    embeddings = OpenAIEmbeddings()  # noqa: ERA001
+    """
     embeddings = HuggingFaceEmbeddings(
         # A small sentence-transformers model mapping sentences & paragraphs to a
         # 384 dimensional dense vector space and can be used for tasks like
@@ -96,7 +114,7 @@ def main() -> None:
         #
         # model_name="mixedbread-ai/mxbai-embed-xsmall-v1",  # noqa: ERA001
     )
-    # """
+    """
 
     # Acquire documents.
     print("Acquiring data")
@@ -124,7 +142,7 @@ def main() -> None:
         print("=" * 42)
         print("Query:", query)
         print("=" * 42)
-        docs = vector_store.similarity_search(query, k=3)
+        docs = vector_store.similarity_search(query, k=4)
         for doc in docs:
             print(doc.page_content)
             print()
