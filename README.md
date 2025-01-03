@@ -19,13 +19,11 @@
 | [CrateDB]
 | [Community Forum]
 
-The `langchain-cratedb` package implements core LangChain abstractions
-using [CrateDB] or [CrateDB Cloud].
+The `langchain-cratedb` package implements the [CrateDB provider for LangChain],
+i.e. core LangChain abstractions using [CrateDB] or [CrateDB Cloud].
 
-The package is released under the MIT license. 
-
-Feel free to use the abstraction as provided or else modify them / extend them
-as appropriate for your own application. We appreciate contributions of any kind.
+Feel free to use the abstractions as provided or else modify them / extend them
+as appropriate for your own applications. We appreciate contributions of any kind.
 
 ## Introduction
 
@@ -73,7 +71,7 @@ documentation and examples:
 
 A few notebooks demonstrate how to use the CrateDB vector store functionality
 around its `FLOAT_VECTOR` data type and its `KNN_MATCH` function together with
-LangChain. CrateDBVectorStore
+LangChain.
 
 You will learn how to import and query unstructured data using the
 `CrateDBVectorStore`, for example to create a retrieval augmented generation
@@ -138,6 +136,7 @@ it is deriving from.
 [CrateDB Cloud Console]: https://console.cratedb.cloud/
 [CrateDB Installation]: https://cratedb.com/docs/guide/install/
 [CrateDB LangChain examples]: https://github.com/crate/cratedb-examples/tree/main/topic/machine-learning/llm-langchain
+[CrateDB provider for LangChain]: https://python.langchain.com/docs/integrations/providers/cratedb/
 [CrateDB Self-Managed]: https://cratedb.com/database/self-managed
 [CrateDBVectorStore]: https://github.com/crate/langchain-cratedb/blob/cratedb/docs/vectorstores.ipynb
 [crate]: https://pypi.org/project/crate/
