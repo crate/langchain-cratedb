@@ -93,7 +93,7 @@ python = ">=3.9,<4.0"
 langchain-community = "<0.4"
 langchain-core = "<0.4"
 langchain-postgres = "==0.0.12"
-sqlalchemy-cratedb = ">=0.40.1"
+sqlalchemy-cratedb = ">=0.41.0.dev2"
 
 [tool.ruff.lint]
 

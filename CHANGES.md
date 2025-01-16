@@ -2,6 +2,7 @@
 
 
 ## Unreleased
+- Updated to `crate-2.0.0`, which uses `orjson` for JSON marshalling
 
 ## v0.1.0 - 2025-01-03
 - Added implementation and software tests for `CrateDBCache`,
