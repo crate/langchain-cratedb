@@ -541,6 +541,9 @@ class CrateDBVectorStore(PGVector):
 
             _type = self.EmbeddingStore
 
+            # With NumPy 2, list contains `np.float64` values.
+            embedding = list(map(float, embedding))
+
             results: List[Any] = (
                 session.query(
                     self.EmbeddingStore,
