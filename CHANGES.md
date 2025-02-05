@@ -2,6 +2,8 @@
 
 
 ## Unreleased
+
+## v0.1.1 - 2025-02-05
 - Updated to langchain-postgres 0.0.13
 
 ## v0.1.0 - 2025-01-03
