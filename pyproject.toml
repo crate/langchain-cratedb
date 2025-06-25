@@ -92,7 +92,7 @@ pretty = true
 python = ">=3.9,<4.0"
 langchain-community = "<0.4"
 langchain-core = "<0.4"
-langchain-postgres = "==0.0.13"
+langchain-postgres = "==0.0.15"
 sqlalchemy-cratedb = ">=0.40.1"
 
 [tool.ruff.lint]
