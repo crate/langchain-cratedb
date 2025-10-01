@@ -117,6 +117,12 @@ def test_semantic_cache_chat(engine: sa.Engine) -> None:
         generations=[[ChatGeneration(message=AIMessage(content="fizz"))]],
         llm_output={},
     )
+
+    # Prune metadata information.
+    output.run = None
+    delattr(output.generations[0][0].message, "usage_metadata")
+    delattr(expected_output.generations[0][0].message, "usage_metadata")
+
     assert output == expected_output
     llm_cache.clear(llm_string=llm_string)
 
