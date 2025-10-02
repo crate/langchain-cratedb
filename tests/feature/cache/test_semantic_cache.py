@@ -10,8 +10,8 @@ import uuid
 
 import pytest
 import sqlalchemy as sa
+from langchain.globals import get_llm_cache, set_llm_cache
 from langchain_core.embeddings import Embeddings
-from langchain_core.globals import get_llm_cache, set_llm_cache
 from langchain_core.language_models.fake_chat_models import FakeChatModel
 from langchain_core.load import dumps
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
@@ -120,8 +120,8 @@ def test_semantic_cache_chat(engine: sa.Engine) -> None:
 
     # Prune metadata information.
     output.run = None
-    delattr(output.generations[0][0].message, "usage_metadata")
-    delattr(expected_output.generations[0][0].message, "usage_metadata")
+    delattr(output.generations[0][0].message, "usage_metadata")  # type: ignore[union-attr]
+    delattr(expected_output.generations[0][0].message, "usage_metadata")  # type: ignore[union-attr]
 
     assert output == expected_output
     llm_cache.clear(llm_string=llm_string)
