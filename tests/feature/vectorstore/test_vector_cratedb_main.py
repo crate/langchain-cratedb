@@ -37,7 +37,7 @@ from tests.settings import CONNECTION_STRING
 def _compare_documents(left: Sequence[Document], right: Sequence[Document]) -> None:
     """Compare lists of documents, irrespective of IDs."""
     assert len(left) == len(right)
-    for left_doc, right_doc in zip(left, right):
+    for left_doc, right_doc in zip(left, right, strict=False):
         assert left_doc.page_content == right_doc.page_content
         assert left_doc.metadata == right_doc.metadata
 
@@ -110,7 +110,7 @@ def test_cratedb_embeddings(engine: sa.Engine) -> None:
     """Test end to end construction with embeddings and search."""
     texts = ["foo", "bar", "baz"]
     text_embeddings = FakeEmbeddingsWithAdaDimension().embed_documents(texts)
-    text_embedding_pairs = list(zip(texts, text_embeddings))
+    text_embedding_pairs = list(zip(texts, text_embeddings, strict=False))
     docsearch = CrateDBVectorStore.from_embeddings(
         text_embeddings=text_embedding_pairs,
         collection_name="test_collection",
@@ -154,7 +154,7 @@ def test_cratedb_with_metadatas_with_scores(engine: sa.Engine) -> None:
     )
     output = docsearch.similarity_search_with_score("foo", k=1)
     prune_document_ids(output)
-    docs, scores = zip(*output)
+    docs, scores = zip(*output, strict=False)
     _compare_documents(docs, [Document(page_content="foo", metadata={"page": "0"})])
     # FIXME: WHy is it 1.0 instead of 0.0? That certainly can't be right?
     # Original score value: 0.0
@@ -177,7 +177,7 @@ def test_cratedb_with_filter_match(engine: sa.Engine) -> None:
     #       assert output == [(Document(page_content="foo", metadata={"page": "0"}), 0.0)]  # noqa: E501,ERA001
     output = docsearch.similarity_search_with_score("foo", k=1, filter={"page": "0"})
     prune_document_ids(output)
-    docs, scores = zip(*output)
+    docs, scores = zip(*output, strict=False)
     _compare_documents(docs, [Document(page_content="foo", metadata={"page": "0"})])
     # FIXME: WHy is it 1.0 instead of 0.0? That certainly can't be right?
     # Original score value: 0.0
@@ -199,7 +199,7 @@ def test_cratedb_with_filter_distant_match(engine: sa.Engine) -> None:
     )
     output = docsearch.similarity_search_with_score("foo", k=2, filter={"page": "2"})
     prune_document_ids(output)
-    docs, scores = zip(*output)
+    docs, scores = zip(*output, strict=False)
     _compare_documents(docs, [Document(page_content="baz", metadata={"page": "2"})])
     # Original score value: 0.0013003906671379406
     assert scores == (0.2,)
@@ -328,7 +328,7 @@ def test_cratedb_with_filter_in_set(engine: sa.Engine, operator: str) -> None:
         "foo", k=2, filter={"page": {operator: ["0", "2"]}}
     )
     prune_document_ids(output)
-    docs, scores = zip(*output)
+    docs, scores = zip(*output, strict=False)
     # Original score values: 0.0, 0.0013003906671379406
     _compare_documents(
         docs,
@@ -383,7 +383,7 @@ def test_cratedb_relevance_score(engine: sa.Engine) -> None:
 
     output = docsearch.similarity_search_with_relevance_scores("foo", k=3)
     prune_document_ids(output)
-    docs, scores = zip(*output)
+    docs, scores = zip(*output, strict=False)
     _compare_documents(
         docs,
         [
@@ -475,7 +475,7 @@ def test_cratedb_max_marginal_relevance_search_with_score(engine: sa.Engine) -> 
     )
     output = docsearch.max_marginal_relevance_search_with_score("foo", k=1, fetch_k=3)
     prune_document_ids(output)
-    docs, scores = zip(*output)
+    docs, scores = zip(*output, strict=False)
     _compare_documents(docs, [Document(page_content="foo")])
     # FIXME: WHy is it 1.0 instead of 0.0? That certainly can't be right?
     # Original score value: 0.0
