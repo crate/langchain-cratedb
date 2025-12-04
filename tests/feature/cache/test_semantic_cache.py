@@ -182,7 +182,7 @@ def test_semantic_cache_hit(
         for prompt_i_generations in generations
     ]
     llm_cache = t.cast(CrateDBSemanticCache, get_llm_cache())
-    for prompt_i, llm_generations_i in zip(prompts, llm_generations):
+    for prompt_i, llm_generations_i in zip(prompts, llm_generations, strict=False):
         print(prompt_i)  # noqa: T201
         print(llm_generations_i)  # noqa: T201
         llm_cache.update(prompt_i, llm_string, llm_generations_i)
