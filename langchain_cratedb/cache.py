@@ -6,6 +6,7 @@ from langchain_core.caches import RETURN_VAL_TYPE, BaseCache
 from langchain_core.embeddings import Embeddings
 from langchain_core.load import dumps, loads
 from langchain_core.outputs import Generation
+from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy_cratedb.support import refresh_after_dml
 
 from langchain_cratedb.vectorstores import CrateDBVectorStore
@@ -35,9 +36,7 @@ class CrateDBSemanticCache(BaseCache):
         self,
         embedding: Embeddings,
         *,
-        connection: t.Union[
-            None, DBConnection, sa.Engine, sa.ext.asyncio.AsyncEngine, str
-        ] = None,
+        connection: t.Union[None, DBConnection, sa.Engine, AsyncEngine, str] = None,
         cache_table_prefix: str = "cache_",
         search_threshold: float = 0.2,
         **kwargs: t.Any,

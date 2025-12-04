@@ -14,6 +14,7 @@ import sqlalchemy as sa
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_postgres._utils import maximal_marginal_relevance
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
 
 from langchain_cratedb.vectorstores.main import (
     _LANGCHAIN_DEFAULT_COLLECTION_NAME,
@@ -47,9 +48,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         self,
         embeddings: Embeddings,
         *,
-        connection: Union[
-            None, DBConnection, sa.Engine, sa.ext.asyncio.AsyncEngine, str
-        ] = None,
+        connection: Union[None, DBConnection, sa.Engine, AsyncEngine, str] = None,
         embedding_length: Optional[int] = None,
         collection_names: Optional[List[str]] = None,
         collection_metadata: Optional[dict] = None,
@@ -97,12 +96,12 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         self.logger = logger or logging.getLogger(__name__)
         self.override_relevance_score_fn = relevance_score_fn
         self._engine: Optional[sa.Engine] = None
-        self._async_engine: Optional[sa.ext.asyncio.AsyncEngine] = None
+        self._async_engine: Optional[AsyncEngine] = None
         self._async_init = False
 
         if isinstance(connection, str):
             if async_mode:
-                self._async_engine = sa.ext.asyncio.create_async_engine(
+                self._async_engine = create_async_engine(
                     connection, **(engine_args or {})
                 )
             else:
@@ -110,7 +109,7 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
         elif isinstance(connection, sa.Engine):
             self.async_mode = False
             self._engine = connection
-        elif isinstance(connection, sa.ext.asyncio.AsyncEngine):
+        elif isinstance(connection, AsyncEngine):
             self.async_mode = True
             self._async_engine = connection
         else:
@@ -118,13 +117,9 @@ class CrateDBVectorStoreMultiCollection(CrateDBVectorStore):
                 "connection should be a connection string or an instance of "
                 "sqlalchemy.engine.Engine or sqlalchemy.ext.asyncio.engine.AsyncEngine"
             )
-        self.session_maker: Union[
-            sa.orm.scoped_session, sa.ext.asyncio.async_sessionmaker
-        ]
+        self.session_maker: Union[sa.orm.scoped_session, async_sessionmaker]
         if self.async_mode:
-            self.session_maker = sa.ext.asyncio.async_sessionmaker(
-                bind=self._async_engine
-            )
+            self.session_maker = async_sessionmaker(bind=self._async_engine)
         else:
             self.session_maker = sa.orm.scoped_session(
                 sa.orm.sessionmaker(bind=self._engine)
