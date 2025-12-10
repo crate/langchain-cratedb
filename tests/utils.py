@@ -6,6 +6,7 @@ Source: https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D0.3.2
 
 from typing import Any, Dict, List, Mapping, Optional, cast
 
+from langchain_core.caches import BaseCache
 from langchain_core.callbacks.manager import CallbackManagerForLLMRun
 from langchain_core.language_models.llms import LLM
 from pydantic import model_validator
@@ -61,3 +62,12 @@ class FakeLLM(LLM):
         response = queries[list(queries.keys())[self.response_index]]
         self.response_index = self.response_index + 1
         return response
+
+
+def get_llm_cache() -> BaseCache:
+    """
+    Avoid mypy complaints.
+    """
+    from langchain_core.globals import get_llm_cache
+
+    return cast(BaseCache, get_llm_cache())

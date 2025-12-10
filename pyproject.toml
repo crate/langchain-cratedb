@@ -89,9 +89,10 @@ pretty = true
 "Release Notes" = "https://github.com/crate/langchain-cratedb/releases"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
-langchain-community = "<0.4"
-langchain-core = "<0.4"
+python = ">=3.10,<4.0"
+langchain-community = "<0.5"
+langchain = ">=1,<1.2"
+langchain-classic = "<2"
 langchain-postgres = "==0.0.16"
 sqlalchemy-cratedb = ">=0.40.1"
 

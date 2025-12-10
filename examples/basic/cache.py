@@ -15,7 +15,7 @@ to talk to the LLM (API), so they can also work offline.
 import os
 
 import sqlalchemy as sa
-from langchain.globals import set_llm_cache
+from langchain_core.globals import set_llm_cache
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 from langchain_cratedb import CrateDBCache, CrateDBSemanticCache

@@ -10,8 +10,8 @@ import uuid
 
 import pytest
 import sqlalchemy as sa
-from langchain.globals import get_llm_cache, set_llm_cache
 from langchain_core.embeddings import Embeddings
+from langchain_core.globals import set_llm_cache
 from langchain_core.language_models.fake_chat_models import FakeChatModel
 from langchain_core.load import dumps
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
@@ -22,7 +22,7 @@ from tests.feature.cache.fake_embeddings import (
     ConsistentFakeEmbeddings,
     FakeEmbeddings,
 )
-from tests.utils import FakeLLM
+from tests.utils import FakeLLM, get_llm_cache
 
 
 def random_string() -> str:

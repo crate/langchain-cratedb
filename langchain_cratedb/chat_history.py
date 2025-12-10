@@ -2,12 +2,12 @@ import json
 import typing as t
 
 import sqlalchemy as sa
-from langchain.schema import BaseMessage, _message_to_dict, messages_from_dict
 from langchain_community.chat_message_histories.sql import (
     BaseMessageConverter,
     DBConnection,
     SQLChatMessageHistory,
 )
+from langchain_core.messages import BaseMessage, message_to_dict, messages_from_dict
 from sqlalchemy_cratedb.support import refresh_after_dml, refresh_table
 
 
@@ -55,7 +55,7 @@ class CrateDBMessageConverter(BaseMessageConverter):
 
     def to_sql_model(self, message: BaseMessage, session_id: str) -> t.Any:
         return self.model_class(
-            session_id=session_id, message=json.dumps(_message_to_dict(message))
+            session_id=session_id, message=json.dumps(message_to_dict(message))
         )
 
     def get_sql_model_class(self) -> t.Any:

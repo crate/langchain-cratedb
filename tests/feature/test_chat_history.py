@@ -8,14 +8,14 @@ from typing import Any, Generator, Tuple
 
 import pytest
 import sqlalchemy as sa
-from langchain.memory import ConversationBufferMemory
-from langchain.schema.messages import (
+from langchain_classic.memory import ConversationBufferMemory
+from langchain_community.chat_message_histories.sql import DefaultMessageConverter
+from langchain_core.messages import (
     AIMessage,
     HumanMessage,
     SystemMessage,
-    _message_to_dict,
+    message_to_dict,
 )
-from langchain_community.chat_message_histories.sql import DefaultMessageConverter
 
 from langchain_cratedb.chat_history import CrateDBChatMessageHistory
 
@@ -151,7 +151,7 @@ def test_memory_with_message_store(engine: sa.Engine) -> None:
 
     # Get the message history from the memory store and turn it into JSON.
     messages = memory.chat_memory.messages
-    messages_json = json.dumps([_message_to_dict(msg) for msg in messages])
+    messages_json = json.dumps([message_to_dict(msg) for msg in messages])
 
     # Verify the outcome.
     assert "This is me, the AI" in messages_json
