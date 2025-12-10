@@ -7,12 +7,12 @@ Source: https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D0.3.2
 
 import pytest
 import sqlalchemy as sa
-from langchain.globals import get_llm_cache, set_llm_cache
 from langchain_core.caches import BaseCache
+from langchain_core.globals import set_llm_cache
 from langchain_core.outputs import Generation, LLMResult
 
 from langchain_cratedb import CrateDBCache
-from tests.utils import FakeLLM
+from tests.utils import FakeLLM, get_llm_cache
 
 
 @pytest.fixture()

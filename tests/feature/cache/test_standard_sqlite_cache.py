@@ -10,12 +10,13 @@ import pytest
 import sqlalchemy as sa
 from _pytest.fixtures import FixtureRequest
 from langchain_core.caches import BaseCache, InMemoryCache
+from langchain_core.globals import get_llm_cache, set_llm_cache
 from langchain_core.language_models import FakeListChatModel, FakeListLLM
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.language_models.llms import BaseLLM
 from langchain_core.load import dumps
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
-from langchain_core.outputs import ChatGeneration
+from langchain_core.outputs import ChatGeneration, Generation
 from sqlalchemy.orm import Session
 
 from langchain_cratedb import CrateDBCache
@@ -24,9 +25,6 @@ try:
     from sqlalchemy.orm import declarative_base
 except ImportError:
     from sqlalchemy.ext.declarative import declarative_base  # noqa: F401
-
-from langchain.globals import get_llm_cache, set_llm_cache
-from langchain_core.outputs import Generation
 
 
 @pytest.fixture(params=["memory", "cratedb"])
