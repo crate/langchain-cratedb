@@ -1,6 +1,8 @@
 # LangChain CrateDB Adapter Changelog
 
 ## Unreleased
+
+## v0.2.0 - 2025-12-12
 - Updated to langchain 1.x
 - Updated to langchain-postgres 0.0.16
 
