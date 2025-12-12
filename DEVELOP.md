@@ -37,10 +37,15 @@ pytest -vvv -k cratedb
 ```
 
 ## Release
-```shell
-poetry build
-twine upload --skip-existing dist/*{.tar.gz,.whl}
-```
+- Bump version in `pyproject.toml`'s `tool.poetry.version`.
+- Update `CHANGES.md` correspondingly.
+- Commit both files with `Release 0.2.0`.
+- Tag repository `git tag v0.2.0`.
+- Build and upload package.
+  ```shell
+  poetry build
+  twine upload --skip-existing dist/*{.tar.gz,.whl}
+  ```
 
 ## Genesis
 
