@@ -174,7 +174,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 
 [tool.poetry.group.test.dependencies]
-langchain-openai = "<0.4"
+langchain-openai = "<1.2"
 langchain-tests = "==0.3.22"
 notebook = "<7.6"
 pytest = "<9"
