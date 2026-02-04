@@ -193,7 +193,7 @@ testbook = "<0.5"
 codespell = "<2.5"
 
 [tool.poetry.group.lint.dependencies]
-ruff = "<0.15"
+ruff = "<0.16"
 
 [tool.poetry.group.typing.dependencies]
 mypy = "<1.20"
