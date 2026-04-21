@@ -23,22 +23,6 @@ env:
   POETRY_VERSION: "1.7.1"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'schedule' }}
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.14'
-      - id: files
-        uses: Ana06/get-changed-files@v2.3.0
-      - id: set-matrix
-        run: |
-          python .github/scripts/check_diff.py ${{ steps.files.outputs.all }} >> $GITHUB_OUTPUT
-    outputs:
-      dirs-to-lint: ${{ steps.set-matrix.outputs.dirs-to-lint }}
-      dirs-to-test: ${{ steps.set-matrix.outputs.dirs-to-test }}
   pre-commit:
     name: pre-commit
     runs-on: ubuntu-latest
@@ -55,12 +39,10 @@ jobs:
 
   lint:
     name: "Run linters"
-    needs: [ build ]
-    if: ${{ needs.build.outputs.dirs-to-lint != '[]' || github.event_name == 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
-        working-directory: ${{ fromJson(needs.build.outputs.dirs-to-lint) }}
+        working-directory: ["."]
     uses: ./.github/workflows/_lint.yml
     with:
       working-directory: ${{ matrix.working-directory }}
@@ -68,12 +50,10 @@ jobs:
 
   test:
     name: "Run software tests"
-    needs: [ build ]
-    if: ${{ needs.build.outputs.dirs-to-test != '[]' || github.event_name == 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
-        working-directory: ${{ fromJson(needs.build.outputs.dirs-to-test) }}
+        working-directory: ["."]
     uses: ./.github/workflows/_test.yml
     with:
       working-directory: ${{ matrix.working-directory }}
@@ -81,7 +61,7 @@ jobs:
 
   ci_success:
     name: "CI Success"
-    needs: [build, lint, test, pre-commit]
+    needs: [lint, test, pre-commit]
     if: |
       always()
     runs-on: ubuntu-latest
