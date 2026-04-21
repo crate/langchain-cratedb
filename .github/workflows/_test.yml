@@ -71,7 +71,7 @@ jobs:
           echo "$STATUS" | grep 'nothing to commit, working tree clean'
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
