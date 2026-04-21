@@ -42,8 +42,7 @@ def standard_cache() -> None:
     # Invoke LLM conversation.
     llm = ChatOpenAI(
         # model_name="gpt-3.5-turbo",
-        # model_name="gpt-4o-mini",
-        model_name="chatgpt-4o-latest",  # type: ignore[call-arg]
+        model_name="gpt-4o-mini",  # type: ignore[call-arg]
         temperature=0.7,
     )
     print()
@@ -66,8 +65,7 @@ def semantic_cache() -> None:
     # model_name_embedding = "text-embedding-3-large"
 
     # model_name_chat = "gpt-3.5-turbo"
-    # model_name_chat = "gpt-4o-mini"
-    model_name_chat = "chatgpt-4o-latest"
+    model_name_chat = "gpt-4o-mini"
 
     # Configure embeddings.
     embeddings = OpenAIEmbeddings(model=model_name_embedding)
