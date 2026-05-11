@@ -196,4 +196,4 @@ codespell = "<2.5"
 ruff = "<0.16"
 
 [tool.poetry.group.typing.dependencies]
-mypy = "<1.21"
+mypy = "<2.2"
