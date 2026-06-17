@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Verified support for Python 3.14
+- Fixed failing tests due to changes in langchain
 
 ## v0.2.0 - 2025-12-12
 - Updated to langchain 1.x
