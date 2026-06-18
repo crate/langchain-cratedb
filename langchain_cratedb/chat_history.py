@@ -1,5 +1,6 @@
 import json
 import typing as t
+import warnings
 
 import sqlalchemy as sa
 from langchain_community.chat_message_histories.sql import (
@@ -85,9 +86,18 @@ class CrateDBChatMessageHistory(SQLChatMessageHistory):
             table_name
         )
 
+        if connection_string is not None:
+            warnings.warn(
+                "The `connection_string` parameter is deprecated and will be "
+                "removed in a future release. Use `connection` instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            if connection is None:
+                connection = connection_string
+
         super().__init__(
             session_id,
-            connection_string=connection_string,
             table_name=table_name,
             session_id_field_name=session_id_field_name,
             custom_message_converter=custom_message_converter,
@@ -97,13 +107,13 @@ class CrateDBChatMessageHistory(SQLChatMessageHistory):
         )
 
         # Patch dialect to invoke `REFRESH TABLE` after each DML operation.
-        refresh_after_dml(self.Session)
+        refresh_after_dml(self.session_maker)
 
     def clear(self) -> None:
         """
         Needed for CrateDB to synchronize data because `on_flush` did not catch it.
         """
         outcome = super().clear()
-        with self.Session() as session:
+        with self.session_maker() as session:
             refresh_table(session, self.sql_model_class)
         return outcome
