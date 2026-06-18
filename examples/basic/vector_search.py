@@ -6,7 +6,7 @@ As input data, the example uses the canonical `state_of_the_union.txt`.
 Synopsis::
 
     # Install prerequisites.
-    pip install --upgrade langchain-cratedb langchain-openai
+    pip install --upgrade langchain-cratedb langchain-openai langchain-text-splitters
 
     # Start database.
     docker run --rm -it --publish=4200:4200 crate/crate:nightly
@@ -31,7 +31,7 @@ import os
 import typing as t
 
 import requests
-from langchain_classic.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 
