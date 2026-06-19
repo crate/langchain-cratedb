@@ -160,6 +160,11 @@ asyncio_mode = "auto"
 log_level = "DEBUG"
 log_cli_level = "DEBUG"
 
+[dependency-groups]
+dev = [
+    "langchain-text-splitters>=1.1.2",
+]
+
 [tool.poetry.group.test]
 optional = true
 
