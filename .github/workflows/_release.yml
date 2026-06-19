@@ -124,7 +124,6 @@ jobs:
     needs:
       - build
       - test-pypi-publish
-      - pre-release-checks
       - publish
     runs-on: ubuntu-latest
     permissions:

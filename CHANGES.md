@@ -1,6 +1,8 @@
 # LangChain CrateDB Adapter Changelog
 
 ## Unreleased
+
+## v0.2.1 - 2026-06-19
 - Verified support for Python 3.14
 - Fixed failing tests due to changes in langchain
 
