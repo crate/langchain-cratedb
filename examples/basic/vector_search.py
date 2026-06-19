@@ -31,9 +31,9 @@ import os
 import typing as t
 
 import requests
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_cratedb import CrateDBVectorStore
 
