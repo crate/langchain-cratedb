@@ -162,7 +162,7 @@ log_cli_level = "DEBUG"
 
 [dependency-groups]
 dev = [
-    "langchain-classic>=1.0.8",
+    "langchain-text-splitters>=1.1.2",
 ]
 
 [tool.poetry.group.test]
