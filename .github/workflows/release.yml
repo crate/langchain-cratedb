@@ -10,6 +10,11 @@ on:
         type: string
         default: 'main'
 
+permissions:
+  contents: read
+  checks: write
+  statuses: write
+
 jobs:
   pypi:
     name: Build & publish package to pypi
@@ -19,8 +24,6 @@ jobs:
       matrix:
         os: ['ubuntu-latest']
         python-version: ['3.11']
-    permissions:
-      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -48,4 +51,8 @@ jobs:
           twine check dist/*
 
       - name: Publish package to PyPI
+        if: startsWith(github.event.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
