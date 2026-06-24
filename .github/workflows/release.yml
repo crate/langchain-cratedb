@@ -1,0 +1,53 @@
+---
+name: release
+
+on: 
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to release from
+        required: true
+        type: string
+        default: 'main'
+
+jobs:
+  pypi:
+    name: Build & publish package to pypi
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest']
+        python-version: ['3.11']
+    if: startsWith(github.event.ref, 'refs/tags')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          cache-dependency-glob: |
+            setup.py
+          cache-suffix: ${{ matrix.python-version }}
+          enable-cache: true
+          version: "latest"
+
+      - name: Build package
+        run: |
+          uv pip install --system build twine wheel
+          python -m build
+          twine check dist/*
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
