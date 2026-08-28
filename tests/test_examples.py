@@ -35,7 +35,8 @@ def test_file(run_file: t.Callable, file: Path) -> None:
     """
     Execute Python code, one test case per .py file.
 
-    Skip test cases that trip when no OpenAI API key is configured.
+    Skip test cases that need a service this machine does not provide: an
+    OpenAI API key, or a reachable Ollama server.
     """
     if file.name in SKIP_FILES:
         raise pytest.skip(f"FIXME: Skipping file: {file.name}")
@@ -47,3 +48,7 @@ def test_file(run_file: t.Callable, file: Path) -> None:
         raise pytest.skip(
             "Skipping test because `OPENAI_API_KEY` is not defined"
         ) from ex
+    except ConnectionError as ex:
+        if "Failed to connect to Ollama" not in str(ex):
+            raise
+        raise pytest.skip("Skipping test because Ollama is not reachable") from ex
