@@ -176,6 +176,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 
 [tool.poetry.group.test.dependencies]
+langchain-ollama = "<2"
 langchain-openai = "<1.7"
 langchain-tests = "==1.1.9"
 langchain-text-splitters = ">=1.1.2"
