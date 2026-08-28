@@ -1,4 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "rangeStrategy": "widen",
+
+  // One pull request per class of update, instead of one per package. A later rule overrides an earlier one, so the broadest case comes first and the narrower groups refine it. Major updates stay ungrouped, one pull request each, since these are the ones that need reading.
+  "packageRules": [
+    {
+      "matchUpdateTypes": [ "minor", "patch" ],
+      "groupName": "minor and patch updates",
+    },
+    {
+      // Poetry labels a group's dependencies with the group's own name.
+      "matchDepTypes": [ "test", "lint", "typing", "codespell" ],
+      "matchUpdateTypes": [ "minor", "patch" ],
+      "groupName": "development tooling",
+    },
+    {
+      "matchManagers": [ "github-actions" ],
+      "groupName": "CI actions",
+    },
+  ],
 }
