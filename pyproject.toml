@@ -160,11 +160,6 @@ asyncio_mode = "auto"
 log_level = "DEBUG"
 log_cli_level = "DEBUG"
 
-[dependency-groups]
-dev = [
-    "langchain-text-splitters>=1.1.2",
-]
-
 [tool.poetry.group.test]
 optional = true
 
@@ -182,6 +177,7 @@ optional = true
 [tool.poetry.group.test.dependencies]
 langchain-openai = "<1.7"
 langchain-tests = "==1.1.9"
+langchain-text-splitters = ">=1.1.2"
 notebook = "<7.7"
 pytest = "<10"
 pytest-asyncio = "<1.5"
