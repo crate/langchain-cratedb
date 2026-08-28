@@ -1,29 +1,42 @@
 """
-Use CrateDB Vector Search with OpenAI embeddings.
+Use CrateDB Vector Search with embeddings computed by a local Ollama server.
+
+Ollama runs the embedding model in its own process and speaks HTTP, so this
+program needs no account, no API key, and no machine learning stack of its
+own. `vector_ollama.py` and `vector_openai.py` are otherwise the same program.
+
+- https://ollama.com/library/nomic-embed-text
+- https://python.langchain.com/docs/integrations/text_embedding/ollama/
 
 As input data, the example uses the canonical `state_of_the_union.txt`.
 
 Synopsis::
 
     # Install prerequisites.
-    pip install --upgrade langchain-cratedb langchain-openai langchain-text-splitters
+    pip install --upgrade langchain-cratedb langchain-ollama langchain-text-splitters
 
     # Start database.
     docker run --rm -it --publish=4200:4200 crate/crate:nightly
 
-    # Configure: Set environment variables to configure OpenAI authentication token
-    # and optionally CrateDB connection URL.
-    export OPENAI_API_KEY="<API KEY>"
+    # Serve the embedding model. `nomic-embed-text` produces 768 dimensions,
+    # well within the 2048 a CrateDB FLOAT_VECTOR column accepts.
+    ollama serve
+    ollama pull nomic-embed-text
+
+    # Optionally set environment variables to configure the Ollama and CrateDB
+    # endpoints.
+    export OLLAMA_BASE_URL="http://localhost:11434"
     export CRATEDB_SQLALCHEMY_URL="crate://crate@localhost/?schema=doc"
 
     # Run program.
-    python examples/basic/vector_search.py
+    python examples/basic/vector_ollama.py
 """  # noqa: E501
 # /// script
-# requires-python = ">=3.9"
+# requires-python = ">=3.10"
 # dependencies = [
-#   "langchain-openai",
 #   "langchain-cratedb",
+#   "langchain-ollama",
+#   "langchain-text-splitters",
 # ]
 # ///
 
@@ -32,7 +45,7 @@ import typing as t
 
 import requests
 from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_cratedb import CrateDBVectorStore
@@ -40,6 +53,8 @@ from langchain_cratedb import CrateDBVectorStore
 CRATEDB_SQLALCHEMY_URL = os.environ.get(
     "CRATEDB_SQLALCHEMY_URL", "crate://crate@localhost/?schema=testdrive"
 )
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+EMBEDDING_MODEL = "nomic-embed-text"
 
 
 def get_documents() -> t.List[Document]:
@@ -57,12 +72,17 @@ def get_documents() -> t.List[Document]:
 
 
 def main() -> None:
+    # Set up the embedding model.
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=OLLAMA_BASE_URL)
+
     # Acquire documents.
     documents = get_documents()
 
     # Embed each chunk, and load them into the vector store.
     vector_store = CrateDBVectorStore.from_documents(
-        documents, OpenAIEmbeddings(), connection=CRATEDB_SQLALCHEMY_URL
+        documents=documents,
+        embedding=embeddings,
+        connection=CRATEDB_SQLALCHEMY_URL,
     )
 
     # Invoke a query, and display the first result.
