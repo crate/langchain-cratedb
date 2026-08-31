@@ -160,11 +160,6 @@ asyncio_mode = "auto"
 log_level = "DEBUG"
 log_cli_level = "DEBUG"
 
-[dependency-groups]
-dev = [
-    "langchain-text-splitters>=1.1.2",
-]
-
 [tool.poetry.group.test]
 optional = true
 
@@ -180,15 +175,16 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 
 [tool.poetry.group.test.dependencies]
-langchain-openai = "<1.3"
-langchain-tests = "==1.1.7"
-notebook = "<7.6"
+langchain-openai = "<1.7"
+langchain-tests = "==1.1.9"
+langchain-text-splitters = ">=1.1.2"
+notebook = "<7.7"
 pytest = "<10"
-pytest-asyncio = "<1.4"
+pytest-asyncio = "<1.5"
 pytest-cov = "<8"
 pytest-mock = "<4"
 pytest-rerunfailures = "<17"
-pytest-socket = "<0.8"
+pytest-socket = "<0.9"
 pytest-watcher = "<0.7"
 requests = "<3"
 sqlparse = "<0.7"
@@ -201,4 +197,4 @@ codespell = "<2.5"
 ruff = "<0.16"
 
 [tool.poetry.group.typing.dependencies]
-mypy = "<2.2"
+mypy = "<2.4"
