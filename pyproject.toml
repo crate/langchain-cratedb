@@ -154,6 +154,7 @@ addopts = """
   --strict-markers --strict-config --durations=5
   --cov --cov-report=term-missing --cov-report=xml
 """
+timeout = 120
 markers = [
 ]
 asyncio_mode = "auto"
@@ -186,6 +187,7 @@ pytest-cov = "<8"
 pytest-mock = "<4"
 pytest-rerunfailures = "<17"
 pytest-socket = "<0.9"
+pytest-timeout = "<3"
 pytest-watcher = "<0.7"
 requests = "<3"
 sqlparse = "<0.7"
