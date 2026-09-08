@@ -63,10 +63,7 @@ def get_documents() -> t.List[Document]:
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
 
     # Load PDF pages, and split each one into fragments.
-    fragments = []
-    for page in loader.load():
-        fragments += text_splitter.create_documents([page.page_content])
-    return fragments
+    return text_splitter.split_documents(loader.load())
 
 
 def main() -> None:
@@ -78,6 +75,7 @@ def main() -> None:
         documents=documents,
         embedding=OpenAIEmbeddings(),
         connection=CRATEDB_SQLALCHEMY_URL,
+        collection_name="pdf_example",
     )
 
     # Ask the same question in each language the specification is published in.
@@ -91,6 +89,7 @@ def main() -> None:
         print("Query:", query)
         print("=" * 42)
         for doc in vector_store.similarity_search(query, k=2):
+            print("Page:", doc.metadata["page_label"])
             print(doc.page_content)
             print()
 
