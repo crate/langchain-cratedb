@@ -1,6 +1,8 @@
 """
 Use CrateDB Vector Search with OpenAI embeddings.
 
+For the same program without an account or an API key, see `vector_ollama.py`.
+
 As input data, the example uses the canonical `state_of_the_union.txt`.
 
 Synopsis::
@@ -17,7 +19,7 @@ Synopsis::
     export CRATEDB_SQLALCHEMY_URL="crate://crate@localhost/?schema=doc"
 
     # Run program.
-    python examples/basic/vector_search.py
+    python examples/basic/vector_openai.py
 """  # noqa: E501
 # /// script
 # requires-python = ">=3.9"
