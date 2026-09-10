@@ -18,9 +18,8 @@ Synopsis::
     # Start database.
     docker run --rm -it --publish=4200:4200 crate/crate:nightly
 
-    # Serve the embedding model. `nomic-embed-text` produces 768 dimensions,
+    # Fetch the embedding model. `nomic-embed-text` produces 768 dimensions,
     # well within the 2048 a CrateDB FLOAT_VECTOR column accepts.
-    ollama serve
     ollama pull nomic-embed-text
 
     # Optionally set environment variables to configure the Ollama and CrateDB
