@@ -26,7 +26,7 @@ Synopsis::
     # Optionally set environment variables to configure the Ollama and CrateDB
     # endpoints.
     export OLLAMA_BASE_URL="http://localhost:11434"
-    export CRATEDB_SQLALCHEMY_URL="crate://crate@localhost/?schema=doc"
+    export CRATEDB_SQLALCHEMY_URL="crate://crate@localhost/?schema=doc_ollama"
 
     # Run program.
     python examples/basic/vector_ollama.py
@@ -51,7 +51,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_cratedb import CrateDBVectorStore
 
 CRATEDB_SQLALCHEMY_URL = os.environ.get(
-    "CRATEDB_SQLALCHEMY_URL", "crate://crate@localhost/?schema=testdrive"
+    "CRATEDB_SQLALCHEMY_URL", "crate://crate@localhost/?schema=testdrive_ollama"
 )
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 EMBEDDING_MODEL = "nomic-embed-text"
