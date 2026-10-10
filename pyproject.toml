@@ -180,7 +180,7 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 langchain-ollama = "<2"
-langchain-openai = "<1.7"
+langchain-openai = "<1.8"
 langchain-tests = "==1.1.9"
 langchain-text-splitters = ">=1.1.2"
 notebook = "<7.7"
@@ -201,7 +201,7 @@ testbook = "<0.5"
 codespell = "<2.5"
 
 [tool.poetry.group.lint.dependencies]
-ruff = "<0.16"
+ruff = "<0.18"
 
 [tool.poetry.group.typing.dependencies]
-mypy = "<2.4"
+mypy = "<2.5"
