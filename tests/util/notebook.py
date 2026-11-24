@@ -49,6 +49,10 @@ def run_notebook(
     from testbook import testbook
 
     with testbook(notebook, timeout=timeout, **kwargs) as tb:
+        # Installing packages would replace the ones the test environment pins.
+        for cell in tb.nb.cells:
+            if cell.cell_type == "code" and cell.source.lstrip().startswith("%pip"):
+                cell.source = ""
         try:
             tb.execute()
 
