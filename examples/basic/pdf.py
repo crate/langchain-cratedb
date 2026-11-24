@@ -73,7 +73,7 @@ def main() -> None:
     # Embed each fragment, and load them into the vector store.
     vector_store = CrateDBVectorStore.from_documents(
         documents=documents,
-        embedding=OpenAIEmbeddings(),
+        embedding=OpenAIEmbeddings(model="text-embedding-3-small"),
         connection=CRATEDB_SQLALCHEMY_URL,
         collection_name="pdf_example",
     )
