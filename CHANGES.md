@@ -1,15 +1,15 @@
 # LangChain CrateDB Adapter Changelog
 
 ## Unreleased
+
+## v0.3.0 - 2026-11-25
+- Verified support for Python 3.14
+- Fixed failing tests due to changes in langchain
 - Raised the minimum to sqlalchemy-cratedb 0.43.1 and removed the
   import-time patch of its dialect
 - Updated to langchain 1.5 and langchain-postgres 0.0.19
 - Removed `CrateDBRetriever`, a stub that raised `NotImplementedError` when
   created. Use `CrateDBVectorStore.as_retriever()` instead
-
-## v0.2.1 - 2026-06-19
-- Verified support for Python 3.14
-- Fixed failing tests due to changes in langchain
 
 ## v0.2.0 - 2025-12-12
 - Updated to langchain 1.x
