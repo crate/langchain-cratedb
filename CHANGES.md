@@ -1,6 +1,8 @@
 # LangChain CrateDB Adapter Changelog
 
 ## Unreleased
+- Raised the minimum to sqlalchemy-cratedb 0.43.1 and removed the
+  import-time patch of its dialect
 
 ## v0.2.1 - 2026-06-19
 - Verified support for Python 3.14

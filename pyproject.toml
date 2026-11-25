@@ -95,7 +95,7 @@ langchain-community = "<0.5"
 langchain = ">=1,<1.4"
 langchain-classic = "<2"
 langchain-postgres = "==0.0.17"
-sqlalchemy-cratedb = ">=0.40.1"
+sqlalchemy-cratedb = ">=0.43.1"
 
 [tool.ruff.lint]
 
