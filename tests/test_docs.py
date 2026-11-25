@@ -14,7 +14,6 @@ NOTEBOOKS_FOLDER = ROOT / "docs"
 # TODO: Enable testing for all notebooks.
 SKIP_NOTEBOOKS = [
     "loaders.ipynb",
-    "retrievers.ipynb",
     "stores.ipynb",
     "vectorstores.ipynb",
 ]
