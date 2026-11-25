@@ -1,9 +1,4 @@
-# ruff: noqa: E402  # Module level import not at top of file
 from importlib import metadata
-
-from langchain_cratedb.patches import patch_sqlalchemy_dialect
-
-patch_sqlalchemy_dialect()
 
 from langchain_cratedb.cache import CrateDBCache, CrateDBSemanticCache
 from langchain_cratedb.chat_history import CrateDBChatMessageHistory
