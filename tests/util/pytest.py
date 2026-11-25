@@ -34,6 +34,6 @@ def run_module_function(
         fun = getattr(mod, entrypoint)
 
         # Wrap the entrypoint function into a pytest test case, and run it.
-        test = Function.from_parent(request.node, name=entrypoint, callobj=fun)
+        test = Function.from_parent(request.node.parent, name=entrypoint, callobj=fun)
         test.runtest()
         return test.reportinfo()
