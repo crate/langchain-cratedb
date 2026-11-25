@@ -1,11 +1,16 @@
+import sys
 import typing as t
 from pathlib import Path
 
-import openai
+import langchain_openai
 import pytest
 from _pytest.capture import CaptureFixture
 from _pytest.python import Metafunc
+from langchain_core.language_models import FakeListChatModel
 
+from tests.feature.vectorstore.fake_embeddings import (
+    ConsistentFakeEmbeddingsWithAdaDimension,
+)
 from tests.util.python import generate_file_tests, list_python_files
 
 ROOT = Path(__file__).parent.parent
@@ -14,6 +19,27 @@ EXAMPLES_FOLDER = ROOT / "examples"
 
 # Configure example programs to skip testing.
 SKIP_FILES: t.List[str] = []
+
+
+@pytest.fixture
+def scripted_openai(monkeypatch: pytest.MonkeyPatch, file: Path) -> t.Iterator[None]:
+    """
+    Replace the OpenAI chat model and embeddings by offline substitutes.
+
+    Example programs bind both names when they are imported, so the program is
+    imported afresh while the substitutes are in place, and dropped afterwards.
+    """
+    monkeypatch.setattr(
+        langchain_openai,
+        "ChatOpenAI",
+        lambda **kwargs: FakeListChatModel(responses=["The answer is 42."], **kwargs),
+    )
+    monkeypatch.setattr(
+        langchain_openai, "OpenAIEmbeddings", ConsistentFakeEmbeddingsWithAdaDimension
+    )
+    sys.modules.pop(file.stem, None)
+    yield
+    sys.modules.pop(file.stem, None)
 
 
 def test_dummy(run_file: t.Callable, capsys: CaptureFixture) -> None:
@@ -31,23 +57,16 @@ def pytest_generate_tests(metafunc: Metafunc) -> None:
     generate_file_tests(metafunc, file_paths=file_paths)
 
 
-def test_file(run_file: t.Callable, file: Path) -> None:
+def test_file(run_file: t.Callable, file: Path, scripted_openai: None) -> None:
     """
     Execute Python code, one test case per .py file.
 
-    Skip test cases that need a service this machine does not provide: an
-    OpenAI API key, or a reachable Ollama server.
+    Skip test cases that need a reachable Ollama server.
     """
     if file.name in SKIP_FILES:
         raise pytest.skip(f"FIXME: Skipping file: {file.name}")
     try:
         run_file(file)
-    except openai.OpenAIError as ex:
-        if "The api_key client option must be set" not in str(ex):
-            raise
-        raise pytest.skip(
-            "Skipping test because `OPENAI_API_KEY` is not defined"
-        ) from ex
     except ConnectionError as ex:
         if "Failed to connect to Ollama" not in str(ex):
             raise
