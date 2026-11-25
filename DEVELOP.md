@@ -40,12 +40,12 @@ pytest -vvv -k cratedb
 - Bump version in `pyproject.toml`'s `tool.poetry.version`.
 - Update `CHANGES.md` correspondingly.
 - Commit both files with `Release 0.2.0`.
-- Tag repository `git tag v0.2.0`.
-- Build and upload package.
+- Tag the commit and push the tag.
   ```shell
-  poetry build
-  twine upload --skip-existing dist/*{.tar.gz,.whl}
+  git tag v0.2.0
+  git push origin v0.2.0
   ```
+- The `release` workflow builds the package from the tag and publishes it to PyPI.
 
 ## Genesis
 

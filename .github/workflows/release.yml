@@ -1,43 +1,27 @@
 ---
 name: release
 
-on: 
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: Branch to release from
-        required: true
-        type: string
-        default: 'main'
+on:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   pypi:
     name: Build & publish package to pypi
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ['ubuntu-latest']
-        python-version: ['3.11']
-    if: startsWith(github.event.ref, 'refs/tags')
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-        with:
-          ref: ${{ inputs.branch }}
 
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v10.0.1
         with:
-          cache-dependency-glob: |
-            setup.py
-          cache-suffix: ${{ matrix.python-version }}
-          enable-cache: true
           version: "latest"
 
       - name: Build package
