@@ -64,7 +64,9 @@ def main() -> None:
 
     # Embed each chunk, and load them into the vector store.
     vector_store = CrateDBVectorStore.from_documents(
-        documents, OpenAIEmbeddings(), connection=CRATEDB_SQLALCHEMY_URL
+        documents,
+        OpenAIEmbeddings(model="text-embedding-3-small"),
+        connection=CRATEDB_SQLALCHEMY_URL,
     )
 
     # Invoke a query, and display the first result.
