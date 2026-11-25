@@ -145,7 +145,6 @@ select = [
 
 [tool.coverage.run]
 omit = [
-    "langchain_cratedb/retrievers.py",
     "tests/*",
     # Runs against a local Ollama server, which CI does not provide, so the
     # suite reaches its import and skips the rest.
