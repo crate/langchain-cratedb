@@ -33,15 +33,20 @@ def test_notebook(notebook: Path) -> None:
     """
     Execute Jupyter Notebook, one test case per .ipynb file.
 
-    Skip test cases that trip when no OpenAI API key is configured.
+    Skip test cases that trip when no OpenAI API key is configured, or when
+    its account has no credits.
     """
     if notebook.name in SKIP_NOTEBOOKS:
         raise pytest.skip(f"FIXME: Excluding notebook: {notebook.name}")
     try:
         run_notebook(notebook)
     except nbclient.exceptions.CellExecutionError as ex:
-        if "The api_key client option must be set" not in str(ex):
-            raise
-        raise pytest.skip(
-            "Skipping test because `OPENAI_API_KEY` is not defined"
-        ) from ex
+        if "Missing credentials" in str(ex):
+            raise pytest.skip(
+                "Skipping test because `OPENAI_API_KEY` is not defined"
+            ) from ex
+        if "no credits remaining" in str(ex):
+            raise pytest.skip(
+                "Skipping test because the OpenAI account has no credits"
+            ) from ex
+        raise
